@@ -1,0 +1,7 @@
+{
+  "name": "g-sonde",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
