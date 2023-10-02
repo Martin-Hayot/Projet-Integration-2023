@@ -1,11 +1,8 @@
-const { json } = require("express");
-express = require("express");
+const http = require('http');
 
-const port = process.env.PORT || 8080;
-const app = express();
+const app = require('./app');
 
-app.use(json());
+app.set('port', process.env.PORT || 3000);
+const server = http.createServer(app);
 
-app.listen(port, () => {
-	console.log(`Server running on port ${port}`);
-});
+server.listen(process.env.PORT || 3000);
