@@ -1,34 +1,24 @@
-// Structure pour atteindre le serveur pour lancer les requêtes
-const express = require('express')
-const  app = express() // Création de l'application
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const PersonRoute = require("./routes/User");
+const app = express();
 
-const cors = require('cors')
-const bodyParser = require("express")
-const path = require('path')
-let PORT = process.env.PORT || 8080
+mongoose
+	.connect(process.env.DATABASE_ACCESS)
+	.then(() => {
+		console.log("Database connected");
+	})
+	.catch((error) => {
+		console.error("Error connecting to the database:", error);
+	});
 
-dotenv.config()
-// AddUser de la base de donnée via le fichier .env
-mongoose.connect(process.env.DATABASE_ACCESS)
-  .then(() => {
-    console.log("Database connected");
-  })
-  .catch((error) => {
-    console.error("Error connecting to the database:", error);
-  });
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use("/api/user", PersonRoute);
 
-
-app.use(express.json()) // Convertir les données au formats JSON
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.use(cors())
-
-app.use(express.static(path.join(__dirname, "build")));
-
-//Middelware Fonction permettant d'avoir acces à la requête et sa réponse
-app.set("view engine", "ejs");
-
-
-app.listen(PORT, ()=>console.log(`Server is up and running ${PORT} `)) // Indique le port sur lequel on a la réponse
+app.listen(3001, () => {
+	console.log("listening on port 3001");
+});
