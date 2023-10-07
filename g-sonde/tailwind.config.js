@@ -5,6 +5,10 @@ module.exports = {
 	darkMode: "media",
 	theme: {
 		extend: {},
+		backgroundImage: theme => ({
+			'aquarium': "url('aquarium2.jpg')",
+			
+		}),
 	},
 	variants: {
 		extend: {},
