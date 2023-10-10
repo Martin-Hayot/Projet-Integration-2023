@@ -12,12 +12,12 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const isDesktop = isPlatform("desktop");
+const api_link = 'http://127.0.0.1:3001';
 
 const Aquarium: React.FC = () => {
   const [data, setData] = useState();
   useEffect(() => {
-    axios.get('https://g-sonde.gay:3000/getDataAquarium')
+    axios.get(api_link + '/aquarium/data')
       .then((response) => {
         setData(response.data);
         console.log(data);

@@ -6,7 +6,6 @@ const app = express();
 
 const PersonRoute = require("./routes/User");
 const Aquarium = require('./models/aquarium');
-const aquarium = require('./models/aquarium');
 
 mongoose
     .connect(process.env.DATABASE_ACCESS)
@@ -22,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use("/api", PersonRoute);
 
-app.post('/addDataAquarium', (req, res, next) => {
+app.post('/aquarium/data', (req, res, next) => {
     const aquarium = new Aquarium({
         ...req.body
     });
@@ -31,8 +30,8 @@ app.post('/addDataAquarium', (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 });
 
-app.get('/getDataAquarium', (req, res, next) => {
-    aquarium.find()
+app.get('/aquarium/data', (req, res, next) => {
+    Aquarium.find()
         .then(aquarium => res.status(200).json(aquarium))
         .catch(error => res.status(400).json({ error }));
 });
