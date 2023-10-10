@@ -17,7 +17,7 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
-app.use("/api/user", PersonRoute);
+app.use("/api", PersonRoute);
 
 app.listen(3001, () => {
 	console.log("listening on port 3001");

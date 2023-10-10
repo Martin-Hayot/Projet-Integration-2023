@@ -1,8 +1,11 @@
 import {
 	IonButton,
+	IonButtons,
 	IonContent,
 	IonFooter,
 	IonHeader,
+	IonMenu,
+	IonMenuButton,
 	IonPage,
 	IonTitle,
 	IonToolbar,
@@ -16,7 +19,7 @@ const isDesktop = isPlatform("desktop");
 
 const Home: React.FC = () => {
 	return (
-		<IonPage>
+		<>
 			{isDesktop ? (
 				// Render desktop-specific content
 				<div>
@@ -58,13 +61,33 @@ const Home: React.FC = () => {
 				</div>
 			) : (
 				// Render mobile-specific content
-				<IonHeader>
-					<IonToolbar>
-						<IonTitle>Home</IonTitle>
-					</IonToolbar>
-				</IonHeader>
+				<>
+					<IonMenu contentId="main-content">
+						<IonHeader>
+							<IonToolbar>
+								<IonTitle>Menu Content</IonTitle>
+							</IonToolbar>
+						</IonHeader>
+						<IonContent className="ion-padding">
+							This is the menu content.
+							<IonButton expand="block" routerLink="/login">
+								Login
+							</IonButton>
+						</IonContent>
+					</IonMenu>
+					<IonPage id="main-content">
+						<IonHeader>
+							<IonToolbar>
+								<IonButtons slot="start">
+									<IonMenuButton></IonMenuButton>
+								</IonButtons>
+								<IonTitle>Menu</IonTitle>
+							</IonToolbar>
+						</IonHeader>
+					</IonPage>
+				</>
 			)}
-		</IonPage>
+		</>
 	);
 };
 
