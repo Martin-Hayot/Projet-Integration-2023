@@ -17,7 +17,7 @@ const api_link = 'http://127.0.0.1:3001';
 const Aquarium: React.FC = () => {
   const [data, setData] = useState();
   useEffect(() => {
-    axios.get(api_link + '/aquarium/data')
+    axios.get(api_link + '/api/aquarium/data')
       .then((response) => {
         setData(response.data);
         console.log(data);
