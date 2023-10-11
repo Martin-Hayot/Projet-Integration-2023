@@ -5,8 +5,12 @@ const TemplateChemicalComponent = new mongoose.Schema({
     type: String,
     required: true,
   },
-  chemicalComponentMesureValue: {
-    type: String,
+  chemicalComponentMinumumValue: {
+    type: Number,
+    required: true,
+  },
+  chemicalComponentMaximumValue: {
+    type: Number,
     required: true,
   }
 });

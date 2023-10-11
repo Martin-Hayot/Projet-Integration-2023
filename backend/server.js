@@ -8,6 +8,13 @@ const cors = require('cors')
 const bodyParser = require("express")
 const path = require('path')
 let PORT = process.env.PORT || 8080
+const routeUser = require('./routes/User')
+const routeAquarium = require('./routes/Aquarium')
+const routeChemicalComponent = require('./routes/ChemicalComponent')
+
+
+
+//const routeAquarium = require('./routes/Aquarium')
 
 dotenv.config()
 // AddUser de la base de donnée via le fichier .env
@@ -25,10 +32,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
 
-app.use(express.static(path.join(__dirname, "build")));
+
 
 //Middelware Fonction permettant d'avoir acces à la requête et sa réponse
-app.set("view engine", "ejs");
+app.use('/', routeUser);
+app.use('/', routeAquarium);
+app.use('/', routeChemicalComponent);
+
 
 
 app.listen(PORT, ()=>console.log(`Server is up and running ${PORT} `)) // Indique le port sur lequel on a la réponse

@@ -6,7 +6,7 @@ const templateAquarium = new mongoose.Schema({
         required: true
     },
     aquariumSize:{
-        type: double,
+        type: Number,
         required: true
     },
     aquariumDatePurchase:{
