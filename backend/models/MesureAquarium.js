@@ -15,8 +15,8 @@ const TemplateMesure = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  MesureTime: {
-    type: Number,
+  mesureTime: {
+    type: String,
     required: true,
   },
   mesureValue: {
@@ -25,4 +25,4 @@ const TemplateMesure = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Mesure', templateMesure, 'Mesure');
+module.exports = mongoose.model('Mesure', TemplateMesure, 'Mesure');

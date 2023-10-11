@@ -1,18 +1,18 @@
 const  express = require("express")
 const router = express.Router()
-const userController = require('../controllers/User')
+const user = require('../controllers/User')
 const authentification = require('../middelware/authentification')
 
-router.post('/createUser', userController.createUser);
+router.post('/createUser', user.createUser);
 
-router.post('/login', userController.login)
+router.post('/login', user.login)
 
-router.get('/showAllUsers', authentification, userController.showAllUsers)
+router.get('/showAllUsers', authentification, user.showAllUsers)
 
-router.get('/showOneUser', userController.ShowOneUser);
+router.get('/showOneUser', user.ShowOneUser);
 
-router.put('/modify/:id', userController.modifyUser);
+router.put('/modify/:id', user.modifyUser);
 
-router.delete('/delete/:id', authentification, userController.deleteUser);
+router.delete('/delete/:id', authentification, user.deleteUser);
 
 module.exports = router

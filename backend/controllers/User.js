@@ -25,7 +25,6 @@ exports.createUser = (request, response)=>{
     })
 }
 
-
 exports.ShowOneUser = (request, response) =>{
     User.findOne(_id.request.params.id)
     .then((user)=>{
@@ -44,7 +43,6 @@ exports.searchEmail =(request, response)=>{
         .catch((error)=>{
             response.status(404).json({error:error})})
     }
-
 
 exports.showAllUsers = (request,response)=>{
     User.find()
