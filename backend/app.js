@@ -1,28 +1,26 @@
 const express = require('express');
-const cors = require('cors');
+const mongoose = require('mongoose');
+const cors = require("cors");
 const app = express();
 
-//Activer CORS
+
+const PersonRoute = require("./routes/User");
+const aquariumDataRoute = require("./routes/aquarium/Data")
+
+mongoose
+    .connect(process.env.DATABASE_ACCESS)
+    .then(() => {
+        console.log("Database connected");
+    })
+    .catch((error) => {
+        console.error("Error connecting to the database:", error);
+    });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.use((req, res, next) => {
-  console.log('Requête reçue !');
-  next();
-});
-
-app.use((req, res, next) => {
-  res.status(201);
-  next();
-});
-
-app.use((req, res, next) => {
-  res.json({ message: 'Votre requête a bien été reçue !' });
-  next();
-});
-
-app.use((req, res, next) => {
-  console.log('Réponse envoyée avec succès !');
-});
-
+app.use("/api/user", PersonRoute);
+app.use("/api/aquarium/data", aquariumDataRoute)
 
 module.exports = app;
