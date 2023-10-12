@@ -1,0 +1,16 @@
+const  express = require("express")
+const router = express.Router()
+const ChemicalComponent = require('../controllers/ChemicalComponent')
+const authentification = require('../middelware/authentification')
+
+router.post('/createAquarium', ChemicalComponent.createChemicalComponent);
+
+router.get('/showAllUsers', authentification, ChemicalComponent.showAllChemicalComponent)
+
+//router.get('/showOneUser', ChemicalComponentController.ShowOneChemicalComponent);
+
+router.put('/modify/:id', ChemicalComponent.modifyChemicalComponent);
+
+router.delete('/delete/:id', authentification, ChemicalComponent.deleteChemicalComponent);
+
+module.exports = router
