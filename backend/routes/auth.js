@@ -1,7 +1,12 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const authenticateToken = require("../middleware/auth");
-const generateAccessToken = require("../utils/auth");
+const {
+	getGoogleOAuthTokens,
+	getGoogleUser,
+	generateAccessToken,
+} = require("../utils/auth");
 const User = require("../models/user");
 
 router.post("/signup", async (req, res) => {
@@ -54,6 +59,63 @@ router.post("/login", async (req, res) => {
 	} catch (e) {
 		console.log(e);
 		res.status(500).json(e);
+	}
+});
+
+router.get("/google", async (req, res) => {
+	const google_id = process.env.GOOGLE_CLIENT_ID;
+	const redirect_uri = process.env.GOOGLE_OAUTH_REDIRECT_URL;
+	const root_url = "https://accounts.google.com/o/oauth2/v2/auth";
+	const options = {
+		redirect_uri: redirect_uri,
+		client_id: google_id,
+		access_type: "offline",
+		response_type: "code",
+		prompt: "consent",
+		scope: [
+			"https://www.googleapis.com/auth/userinfo.email",
+			"https://www.googleapis.com/auth/userinfo.profile",
+		].join(" "),
+	};
+	const qs = new URLSearchParams(options).toString();
+	console.log(`${root_url}?${qs}`);
+	res.status(200).json({
+		url: `${root_url}?${qs}`,
+	});
+});
+
+router.get("/google/callback", async (req, res) => {
+	const code = req.query.code;
+	try {
+		const { id_token } = await getGoogleOAuthTokens(code);
+		const googleUser = await getGoogleUser(id_token);
+		if (!googleUser.email_verified) {
+			res.status(403).json({ errors: { msg: "Email not verified" } });
+		}
+		const access_token = generateAccessToken({ email: googleUser.email });
+		const user = await User.findOneAndUpdate(
+			{
+				email: googleUser.email,
+			},
+			{
+				firstname: googleUser.given_name,
+				lastname: googleUser.family_name,
+				accessToken: access_token,
+			},
+			{
+				upsert: true,
+				new: true,
+			}
+		);
+		res
+			.cookie("accessToken", access_token, {
+				httpOnly: true,
+				maxAge: 900000,
+			})
+			.redirect("http://localhost:5173/user/home");
+	} catch (e) {
+		console.log(e, "Failed to login with Google");
+		res.redirect("http://localhost:5173/user/login");
 	}
 });
 
