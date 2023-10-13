@@ -1,26 +1,24 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const authenticateToken = require("../middleware/auth");
 const generateAccessToken = require("../utils/auth");
 const User = require("../models/user");
 
 router.post("/signup", async (req, res) => {
-	let { email, password, firstname, lastname } = req.body;
+	let user = new User({
+		firstname: req.body.firstname,
+		lastname: req.body.lastname,
+		email: req.body.email,
+		password: req.body.password,
+	});
 	try {
-		const searchedUser = await User.FindOne({ email: email });
-
+		const searchedUser = await User.exists({ email: user.email });
 		if (searchedUser !== null) {
-			return res.json({ errors: { msg: "User already exists" } });
+			return res.status(409).json({ errors: { msg: "User already exists" } });
 		}
-		hash = await bcrypt.hash(password, 10);
-		const newUser = await User.insertOne({
-			firstname: firstname,
-			lastname: lastname,
-			email: email,
-			password: hash,
-		});
-		res.status("201").json({
+		hash = await bcrypt.hash(user.password, 10);
+		await User.create(user);
+		res.status(201).json({
 			message: "User created successfully",
 		});
 	} catch (e) {
@@ -30,59 +28,32 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-	const { email, password } = req.body;
-	const user = { email, user_type: "USER" };
-
+	let user = new User({
+		email: req.body.email,
+		password: req.body.password,
+	});
 	try {
-		const searchedUser = await db.User.findUnique({
-			where: {
-				email: user.email,
-			},
-			select: {
-				email: true,
-				password: true,
-				role: true,
-			},
-		});
+		const searchedUser = await User.exists({ email: user.email }).select(
+			"password"
+		);
 		if (searchedUser == null) {
 			return res.json({ errors: { msg: "User not found" } });
 		}
-		if (searchedUser.role === "ADMIN") {
-			user.user_type = "ADMIN";
-		} else {
-			user.user_type = "USER";
-		}
-		if (await bcrypt.compare(password, searchedUser.password)) {
-			const accessToken = generateAccessToken(user);
-			const updateToken = await db.User.update({
-				where: {
-					email: email,
-				},
-				data: {
-					accessToken: accessToken,
-				},
-			});
-			res.json({
+		if (await bcrypt.compare(user.password, searchedUser.password)) {
+			const accessToken = generateAccessToken({ email: user.email });
+			await User.findOneAndUpdate(
+				{ email: user.email },
+				{ accessToken: accessToken }
+			);
+			res.status(200).json({
 				accessToken: accessToken,
-				email: user.email,
-				role: user.user_type,
 			});
 		} else {
-			res.json({ errors: { msg: "Invalid credentials" } });
+			res.status(401).json({ errors: { msg: "Invalid credentials" } });
 		}
 	} catch (e) {
 		console.log(e);
 		res.status(500).json(e);
-	}
-});
-
-router.get("/role", async (req, res) => {
-	const accessToken = req.headers.authorization;
-	const { user_type } = await jwt.decode(accessToken);
-	if (user_type === "ADMIN") {
-		res.json({ role: "ADMIN" });
-	} else {
-		res.json({ role: "USER" });
 	}
 });
 

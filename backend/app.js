@@ -1,9 +1,9 @@
 const express = require("express");
+const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const app = express();
 
-const PersonRoute = require("./routes/user");
+const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const aquariumDataRoute = require("./routes/data");
 
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.use("/api/user", PersonRoute);
+app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/aquarium/data", aquariumDataRoute);
 

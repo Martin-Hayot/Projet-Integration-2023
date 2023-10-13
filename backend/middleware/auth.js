@@ -14,7 +14,7 @@ async function authenticateToken(req, res, next) {
 			process.env.ACCESS_TOKEN_SECRET
 		);
 
-		req.accessToken = accessToken;
+		req.body.accessToken = accessToken;
 		next();
 	} catch (error) {
 		return res.json({ errors: { msg: "Token not valid" } });
