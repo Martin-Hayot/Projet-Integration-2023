@@ -92,6 +92,7 @@ router.get("/google/callback", async (req, res) => {
 		if (!googleUser.email_verified) {
 			res.status(403).json({ errors: { msg: "Email not verified" } });
 		}
+		const password = await bcrypt.hash(googleUser.sub, 10);
 		const access_token = generateAccessToken({ email: googleUser.email });
 		const user = await User.findOneAndUpdate(
 			{
@@ -100,6 +101,7 @@ router.get("/google/callback", async (req, res) => {
 			{
 				firstname: googleUser.given_name,
 				lastname: googleUser.family_name,
+				password: password,
 				accessToken: access_token,
 			},
 			{
