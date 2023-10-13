@@ -13,14 +13,11 @@ import {
 	isPlatform,
 } from "@ionic/react";
 import axios from "axios";
-import { menuController } from "@ionic/core/components";
 import React from "react";
-
-const isDesktop = isPlatform("desktop");
 
 const Home: React.FC = () => {
 	async function logout() {
-		await menuController.close();
+		window.location.href = "/";
 	}
 	const [data, setData] = React.useState();
 
@@ -39,7 +36,7 @@ const Home: React.FC = () => {
 				</IonHeader>
 				<IonContent className="ion-padding">
 					This is the menu content.
-					<IonButton expand="block" onClick={logout} routerLink="/">
+					<IonButton expand="block" onClick={logout}>
 						Logout
 					</IonButton>
 				</IonContent>
