@@ -53,7 +53,7 @@ const Home: React.FC = () => {
 						</nav>
 					</div>
 
-					<section className="mx-auto text-center h-screen bg-cover bg-center bg-no-repeat relative bg-aquarium ">
+					<section className="bg-aquarium dark:bg-aquarium mx-auto text-center h-screen bg-cover bg-center bg-no-repeat relative">
 						<h1 className="text-5xl pt-48 mb-6 text-white">Desktop Home</h1>
 						<p className="mb-12 text-white">This is desktop-specific content.</p>
 						<IonButton routerLink="/user/home">
