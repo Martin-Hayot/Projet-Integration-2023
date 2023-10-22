@@ -6,7 +6,7 @@ module.exports = {
 	theme: {
 		extend: {},
 		backgroundImage: {
-			'aquarium': "url('aquarium2.jpg')",
+			'aquarium': "url('aquarium2-compressed-full.jpg')",
 		},
 	},
 	variants: {
