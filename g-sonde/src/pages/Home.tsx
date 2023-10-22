@@ -64,12 +64,16 @@ const Home: React.FC = () => {
 							<img src="sonde.png" className="animate-fade-in block h-full w-full scale-100 transform object-cover object-center opacity-100 transition duration-300 group-hover:scale-110" alt="" />
 							</div>
 							<div className="absolute bottom-0 z-20 m-0 pb-4 ps-4 transition duration-300 ease-in-out group-hover:-translate-y-1 group-hover:translate-x-3 group-hover:scale-110">
-							<h1 className="font-serif text-2xl font-bold text-white shadow-xl">Your Probe</h1>
+							<h1 className="font-serif text-2xl font-bold text-white shadow-xl ">Your Probe</h1>
 							</div>
 						</div>
 						
-						<footer className="mt-48"> hello </footer>
 					</section>
+					<footer className="bg-transparent fixed bottom-0 w-full sm:h-12 md:h-16 lg:h-20 xl:h-24 backdrop-blur"> 
+						<div className="footer-content flex justify-center items-center mt-4 text-xl font-serif">
+    						G-Sonde, developed thanks to Valérie Ramakers
+  						</div>
+					</footer>
 				</div>
 			) : (
 				// Render mobile-specific content
