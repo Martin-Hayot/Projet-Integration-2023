@@ -1,0 +1,10 @@
+Dans les fichiers de ce dosser ont été calculés la valeur de sortie de l'aop en fonction d'une résistance connue. 
+On peut voir que celle de 1 ohm et de 10 ohm, les volts de sortie sont astronomique pour être a l'echelle des 5V de l'arduino.
+
+En mettant une résistance trop grande telle que 1k ou 1 Mohm les valeurs perdent en précision. 
+
+Dans cette idée la, on peut s'apercevoir que la valeur de résistance qui servira de repère à la sortie de la sonde est de 100 ohm.
+
+En utilisant la résistance de 100ohm, on devra avoir un ratio de gain de 2.5. Pour que le 2 V max en sortie redevienne un 5V et gagne en précision 
+lors de l'étalonnage par l'Arduino. 
+Pour que les mesures de l'Arduino soient les plus précises, il faut avoir un signal qui se trouve entre 0 et 5V.
