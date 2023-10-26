@@ -1,12 +1,10 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const authenticateToken = require("../middleware/auth");
+const { getGoogleOAuthTokens, getGoogleUser } = require("../utils/oauth.utils");
 const {
-	getGoogleOAuthTokens,
-	getGoogleUser,
 	generateAccessToken,
-} = require("../utils/auth");
+	generateRefreshToken,
+} = require("../utils/jwt.utils");
 const User = require("../models/user");
 
 router.post("/signup", async (req, res) => {
@@ -16,15 +14,17 @@ router.post("/signup", async (req, res) => {
 		email: req.body.email,
 		password: req.body.password,
 	});
+	if (!user.email || !user.password)
+		return res.status(400).json({ msg: "Username and password are required." });
 	try {
 		const searchedUser = await User.exists({ email: user.email });
 		if (searchedUser !== null) {
-			return res.status(409).json({ errors: { msg: "User already exists" } });
+			return res.status(409).json({ msg: "User already exists" });
 		}
-		hash = await bcrypt.hash(user.password, 10);
+		user.password = await bcrypt.hash(user.password, 10);
 		await User.create(user);
 		res.status(201).json({
-			message: "User created successfully",
+			msg: "User created successfully",
 		});
 	} catch (e) {
 		console.log(e);
@@ -37,24 +37,43 @@ router.post("/login", async (req, res) => {
 		email: req.body.email,
 		password: req.body.password,
 	});
+
+	if (!user.email || !user.password)
+		return res.status(400).json({ msg: "Username and password are required." });
+
 	try {
 		const searchedUser = await User.exists({ email: user.email }).select(
 			"password"
 		);
 		if (searchedUser == null) {
-			return res.json({ errors: { msg: "User not found" } });
+			return res.status(401).json({ msg: "User not found" });
 		}
 		if (await bcrypt.compare(user.password, searchedUser.password)) {
-			const accessToken = generateAccessToken({ email: user.email });
+			const accessToken = generateAccessToken({
+				userId: searchedUser._id,
+				email: user.email,
+			});
+			const refresh_token = generateRefreshToken({
+				userId: searchedUser._id,
+				email: user.email,
+			});
 			await User.findOneAndUpdate(
 				{ email: user.email },
-				{ accessToken: accessToken }
+				{ $push: { refreshToken: refresh_token } },
+				{ upsert: true, new: true }
 			);
-			res.status(200).json({
-				accessToken: accessToken,
+
+			res.cookie("accessToken", accessToken, {
+				httpOnly: true,
+				maxAge: 3.154e10,
 			});
+			res.cookie("refreshToken", refresh_token, {
+				httpOnly: true,
+				maxAge: 3.154e10,
+			});
+			res.status(200).json({ msg: "Logged in successfully" });
 		} else {
-			res.status(401).json({ errors: { msg: "Invalid credentials" } });
+			res.status(401).json({ msg: "Invalid credentials" });
 		}
 	} catch (e) {
 		console.log(e);
@@ -87,13 +106,23 @@ router.get("/google", async (req, res) => {
 router.get("/google/callback", async (req, res) => {
 	const code = req.query.code;
 	try {
-		const { id_token } = await getGoogleOAuthTokens(code);
+		const { id_token, access_token, refresh_token } =
+			await getGoogleOAuthTokens(code);
 		const googleUser = await getGoogleUser(id_token);
+		if (googleUser.msg == "Failed to get Google user") {
+			return res.status(403).redirect("http://localhost:5173/login");
+		}
 		if (!googleUser.email_verified) {
-			res.status(403).json({ errors: { msg: "Email not verified" } });
+			res.status(403).redirect("http://localhost:5173/login");
 		}
 		const password = await bcrypt.hash(googleUser.sub, 10);
-		const access_token = generateAccessToken({ email: googleUser.email });
+		const searchedUser = await User.exists({
+			email: googleUser.email,
+			authType: "google",
+		});
+		if (searchedUser !== null) {
+			return res.status(409).redirect("http://localhost:5173/login");
+		}
 		const user = await User.findOneAndUpdate(
 			{
 				email: googleUser.email,
@@ -114,15 +143,15 @@ router.get("/google/callback", async (req, res) => {
 				httpOnly: true,
 				maxAge: 900000,
 			})
+			.cookie("refreshToken", refresh_token, {
+				httpOnly: true,
+				maxAge: 900000,
+			})
 			.redirect("http://localhost:5173/user/home");
 	} catch (e) {
 		console.log(e, "Failed to login with Google");
-		res.redirect("http://localhost:5173/user/login");
+		res.redirect("http://localhost:5173/login");
 	}
-});
-
-router.get("/authenticate", authenticateToken, (req, res) => {
-	res.json({ authenticated: true });
 });
 
 module.exports = router;

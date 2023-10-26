@@ -24,10 +24,16 @@ const Login: React.FC = () => {
 	async function logIn(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		axios
-			.post("http://localhost:3001/api/auth/login", {
-				email: email,
-				password: password,
-			})
+			.post(
+				"http://localhost:3001/api/auth/login",
+				{
+					email: email,
+					password: password,
+				},
+				{
+					withCredentials: true,
+				}
+			)
 			.then((res) => {
 				if (res.status == 200) {
 					setShowSuccessToast(true);
@@ -37,12 +43,12 @@ const Login: React.FC = () => {
 					});
 				} else {
 					setShowErrorToast(true);
-					setToastMessage(res.data.errors.msg);
+					setToastMessage(res.data.msg);
 				}
 			})
 			.catch((err) => {
 				setShowErrorToast(true);
-				setToastMessage(err.response.data.errors.msg);
+				setToastMessage(err.response.data.msg);
 			});
 	}
 

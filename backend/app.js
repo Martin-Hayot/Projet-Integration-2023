@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const cookieParser = require("cookie-parser");
+const { deserializeUser } = require("./middleware/auth");
 const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const aquariumDataRoute = require("./routes/data");
@@ -18,7 +19,14 @@ mongoose
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cookieParser());
+app.use(deserializeUser);
+app.use(
+	cors({
+		origin: "http://localhost:5173",
+		credentials: true,
+	})
+);
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);

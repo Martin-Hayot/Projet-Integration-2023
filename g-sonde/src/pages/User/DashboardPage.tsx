@@ -22,8 +22,16 @@ const Home: React.FC = () => {
 	const [data, setData] = React.useState();
 
 	async function getData() {
-		const response = await axios.get("http://127.0.0.1:3001/api/user");
-		setData(response.data.message);
+		axios
+			.get("http://localhost:3001/api/user", {
+				withCredentials: true,
+			})
+			.then((res) => {
+				setData(res.data.message);
+			})
+			.catch((err) => {
+				window.location.href = "/login";
+			});
 	}
 
 	return (

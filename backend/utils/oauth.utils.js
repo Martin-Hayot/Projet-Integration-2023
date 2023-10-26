@@ -1,11 +1,4 @@
-const jwt = require("jsonwebtoken");
 const axios = require("axios");
-
-function generateAccessToken(user) {
-	return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-		expiresIn: 1800,
-	});
-}
 
 async function getGoogleOAuthTokens(code) {
 	const url = "https://oauth2.googleapis.com/token";
@@ -35,11 +28,14 @@ async function getGoogleUser(id_token) {
 		const res = await axios.get(
 			`https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`
 		);
-		console.log(res.data);
 		return res.data;
 	} catch (e) {
 		console.log(e, "Failed to get Google user");
+		return { msg: "Failed to get Google user" };
 	}
 }
 
-module.exports = { generateAccessToken, getGoogleOAuthTokens, getGoogleUser };
+module.exports = {
+	getGoogleOAuthTokens,
+	getGoogleUser,
+};

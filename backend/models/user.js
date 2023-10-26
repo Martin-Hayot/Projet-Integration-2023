@@ -5,7 +5,10 @@ const userSchema = mongoose.Schema({
 	lastname: { type: String, required: true },
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
-	accessToken: { type: String },
+	refreshToken: [String],
+	authType: { type: String, default: "local" },
+	createdAt: { type: Date, default: Date.now },
+	updatedAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("User", userSchema);
