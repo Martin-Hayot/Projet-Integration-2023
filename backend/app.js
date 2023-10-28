@@ -5,7 +5,10 @@ const cors = require("cors");
 
 const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
+const aquariumRoute = require("./routes/aquarium");
+const aquariumDiagnosticRoute = require("./routes/diagnostic");
 const aquariumDataRoute = require("./routes/data");
+
 
 mongoose
 	.connect(process.env.DATABASE_ACCESS)
@@ -22,6 +25,8 @@ app.use(cors());
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/aquarium", aquariumRoute);
+app.use("/api/aquarium/diagnostic", aquariumDiagnosticRoute);
 app.use("/api/aquarium/data", aquariumDataRoute);
 
 module.exports = app;
