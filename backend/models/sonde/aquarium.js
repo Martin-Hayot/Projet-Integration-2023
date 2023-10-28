@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 
 const aquariumSchema = mongoose.Schema({
-	data: { type: Number, required: true },
+	userId: { type: String, required: true },
+	aquariumId: { type: String, required: true },
+	name: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Aquarium", aquariumSchema);
