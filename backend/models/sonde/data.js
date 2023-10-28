@@ -6,4 +6,4 @@ const diagnosticSchema = mongoose.Schema({
     frequency: { type: Number, required: true },
 });
 
-module.exports = mongoose.model("Diagnostic", diagnosticSchema);
+module.exports = mongoose.model("Data", diagnosticSchema);
