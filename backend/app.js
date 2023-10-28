@@ -7,7 +7,10 @@ const cookieParser = require("cookie-parser");
 const { deserializeUser } = require("./middleware/auth");
 const userRoute = require("./routes/User");
 const authRoute = require("./routes/auth");
+const aquariumRoute = require("./routes/aquarium");
+const aquariumDiagnosticRoute = require("./routes/diagnostic");
 const aquariumDataRoute = require("./routes/data");
+
 
 mongoose
 	.connect(process.env.DATABASE_ACCESS)
@@ -31,6 +34,8 @@ app.use(
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/aquarium", aquariumRoute);
+app.use("/api/aquarium/diagnostic", aquariumDiagnosticRoute);
 app.use("/api/aquarium/data", aquariumDataRoute);
 
 module.exports = app;
