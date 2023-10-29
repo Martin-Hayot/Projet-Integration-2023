@@ -31,7 +31,7 @@ async function getGoogleUser(id_token) {
 		return res.data;
 	} catch (e) {
 		console.log(e, "Failed to get Google user");
-		return { msg: "Failed to get Google user" };
+		return { message: "Failed to get Google user" };
 	}
 }
 

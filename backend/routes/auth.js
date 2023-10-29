@@ -15,16 +15,18 @@ router.post("/signup", async (req, res) => {
 		password: req.body.password,
 	});
 	if (!user.email || !user.password)
-		return res.status(400).json({ msg: "Username and password are required." });
+		return res
+			.status(400)
+			.json({ message: "Username and password are required." });
 	try {
 		const searchedUser = await User.exists({ email: user.email });
 		if (searchedUser !== null) {
-			return res.status(409).json({ msg: "User already exists" });
+			return res.status(409).json({ message: "User already exists" });
 		}
 		user.password = await bcrypt.hash(user.password, 10);
 		await User.create(user);
 		res.status(201).json({
-			msg: "User created successfully",
+			message: "User created successfully",
 		});
 	} catch (e) {
 		console.log(e);
@@ -39,14 +41,16 @@ router.post("/login", async (req, res) => {
 	});
 
 	if (!user.email || !user.password)
-		return res.status(400).json({ msg: "Username and password are required." });
+		return res
+			.status(400)
+			.json({ message: "Username and password are required." });
 
 	try {
 		const searchedUser = await User.exists({ email: user.email }).select(
 			"password"
 		);
 		if (searchedUser == null) {
-			return res.status(401).json({ msg: "User not found" });
+			return res.status(401).json({ message: "User not found" });
 		}
 		if (await bcrypt.compare(user.password, searchedUser.password)) {
 			const accessToken = generateAccessToken({
@@ -57,12 +61,6 @@ router.post("/login", async (req, res) => {
 				userId: searchedUser._id,
 				email: user.email,
 			});
-			await User.findOneAndUpdate(
-				{ email: user.email },
-				{ $push: { refreshToken: refresh_token } },
-				{ upsert: true, new: true }
-			);
-
 			res.cookie("accessToken", accessToken, {
 				httpOnly: true,
 				maxAge: 3.154e10,
@@ -71,9 +69,9 @@ router.post("/login", async (req, res) => {
 				httpOnly: true,
 				maxAge: 3.154e10,
 			});
-			res.status(200).json({ msg: "Logged in successfully" });
+			res.status(200).json({ message: "Logged in successfully" });
 		} else {
-			res.status(401).json({ msg: "Invalid credentials" });
+			res.status(401).json({ message: "Invalid credentials" });
 		}
 	} catch (e) {
 		console.log(e);
@@ -123,7 +121,7 @@ router.get("/google/callback", async (req, res) => {
 		if (searchedUser !== null) {
 			return res.status(409).redirect("http://localhost:5173/login");
 		}
-		const user = await User.findOneAndUpdate(
+		await User.findOneAndUpdate(
 			{
 				email: googleUser.email,
 			},

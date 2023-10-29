@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { deserializeUser } = require("./middleware/auth");
-const userRoute = require("./routes/user");
+const userRoute = require("./routes/User");
 const authRoute = require("./routes/auth");
 const aquariumDataRoute = require("./routes/data");
 
