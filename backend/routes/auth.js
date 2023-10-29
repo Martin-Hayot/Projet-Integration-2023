@@ -100,8 +100,7 @@ router.get("/google", async (req, res) => {
 router.get("/google/callback", async (req, res) => {
 	const code = req.query.code;
 	try {
-		const { id_token, access_token, refresh_token } =
-			await getGoogleOAuthTokens(code);
+		const { id_token } = await getGoogleOAuthTokens(code);
 		const googleUser = await getGoogleUser(id_token);
 		if (googleUser.msg == "Failed to get Google user") {
 			return res.status(403).redirect("http://localhost:5173/login");
@@ -117,7 +116,7 @@ router.get("/google/callback", async (req, res) => {
 		if (searchedUser !== null) {
 			return res.status(409).redirect("http://localhost:5173/login");
 		}
-		await User.findOneAndUpdate(
+		const user = await User.findOneAndUpdate(
 			{
 				email: googleUser.email,
 			},
@@ -125,21 +124,28 @@ router.get("/google/callback", async (req, res) => {
 				firstname: googleUser.given_name,
 				lastname: googleUser.family_name,
 				password: password,
-				accessToken: access_token,
 			},
 			{
 				upsert: true,
 				new: true,
 			}
 		);
+		const accessToken = generateAccessToken({
+			userId: user._id,
+			email: user.email,
+		});
+		const refreshToken = generateRefreshToken({
+			userId: user._id,
+			email: user.email,
+		});
 		res
-			.cookie("accessToken", access_token, {
+			.cookie("accessToken", accessToken, {
 				httpOnly: true,
-				maxAge: 900000,
+				maxAge: 3.154e10,
 			})
-			.cookie("refreshToken", refresh_token, {
+			.cookie("refreshToken", refreshToken, {
 				httpOnly: true,
-				maxAge: 900000,
+				maxAge: 3.154e10,
 			})
 			.redirect("http://localhost:5173/user/home");
 	} catch (e) {
