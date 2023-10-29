@@ -16,7 +16,15 @@ function requireUser(req, res, next) {
 			authenticated: false,
 		});
 	}
-	next();
+	const { email } = req.user;
+	searchedUser = User.findOne({ email: email });
+	if (!searchedUser) {
+		return res.status(401).json({
+			message: "Unauthorized",
+			authenticated: false,
+		});
+	}
+	return next();
 }
 
 async function deserializeUser(req, res, next) {
@@ -57,12 +65,14 @@ async function deserializeUser(req, res, next) {
 					return next();
 				}
 				console.log("attempt to reuse a refresh token");
-				const hackedUser = await User.findOne({ userId: decoded.userId });
+				const hackedUser = await User.findById(decoded.userId);
 				hackedUser.refreshToken = [];
 				const result = await hackedUser.save();
 				console.log(result);
+				return next();
 			}
 		);
+		return next();
 	}
 
 	// verify refresh token
@@ -90,7 +100,7 @@ async function deserializeUser(req, res, next) {
 	// store new refresh token in database
 	await User.findOneAndUpdate(
 		{ email: refresh.email },
-		{ $push: { refreshToken: newRefreshToken } },
+		{ $push: { refreshToken: refreshToken } },
 		{ upsert: true, new: true }
 	);
 	const newAccessToken = jwt.sign(
