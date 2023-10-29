@@ -15,9 +15,7 @@ router.post("/signup", async (req, res) => {
 		password: req.body.password,
 	});
 	if (!user.email || !user.password)
-		return res
-			.status(400)
-			.json({ message: "Username and password are required." });
+		return res.status(400).json({ message: "All entries are required" });
 	try {
 		const searchedUser = await User.exists({ email: user.email });
 		if (searchedUser !== null) {
@@ -41,9 +39,7 @@ router.post("/login", async (req, res) => {
 	});
 
 	if (!user.email || !user.password)
-		return res
-			.status(400)
-			.json({ message: "Username and password are required." });
+		return res.status(400).json({ message: "Email and password are required" });
 
 	try {
 		const searchedUser = await User.exists({ email: user.email }).select(

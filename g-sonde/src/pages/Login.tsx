@@ -43,12 +43,12 @@ const Login: React.FC = () => {
 					});
 				} else {
 					setShowErrorToast(true);
-					setToastMessage(res.data.msg);
+					setToastMessage(res.data.message);
 				}
 			})
 			.catch((err) => {
 				setShowErrorToast(true);
-				setToastMessage(err.response.data.msg);
+				setToastMessage(err.response.data.message);
 			});
 	}
 
