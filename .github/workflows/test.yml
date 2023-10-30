@@ -1,0 +1,21 @@
+name: Run tests
+
+on: 
+  push:
+    branches: [master, main, Develop]
+  pull_request:
+    branches: [master, main, Develop]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - run: cd backend
+      - run: npm ci
+      - run: npm test
+      
+      
