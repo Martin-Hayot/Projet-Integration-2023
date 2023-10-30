@@ -1,0 +1,218 @@
+import {
+	IonButton,
+	IonCard,
+	IonCardContent,
+	IonInput,
+	IonItem,
+	IonLabel,
+	IonPage,
+	IonToast,
+} from "@ionic/react";
+import { Browser } from "@capacitor/browser";
+import React, { useState } from "react";
+import '../../../styles/SignUp.css'; // Assurez-vous d'utiliser le bon chemin vers votre fichier CSS
+
+import axios from "axios";
+
+
+const SignUp: React.FC = () => {
+	const [firstname, setFirstname] = useState("");
+	const [lastname, setLastname] = useState("");
+    const [email, setEmail] = useState("");
+	const [password, setPassword] = useState(""); 
+    const [confirmPassword, setConfirmPassword] = useState("");            
+	const [toastMessage, setToastMessage] = useState("");
+	const [showErrorToast, setShowErrorToast] = useState(false);
+	const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [mailValide, setMailValide] = useState(false);
+    const [mdpValide, setMdpValide] = useState(false);
+    const [checkMail, setCheckMail] = useState(false);
+    const [backgroundColor, setBackgroundColor] = useState("");
+    
+    const validationEmail = (currentEmail:string) => {
+        const regularExpression = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        if (regularExpression.test(currentEmail)) {
+            setMailValide(true);
+            console.log("Adresse mail valide.");
+        } else {
+            setMailValide(false);
+            alert("Adresse Mail invalide.");
+        }
+    };
+    
+    // Pour tester la force du mot de passe à travers les codes couleurs
+    const analyze = (value: string) => {
+        const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#_\\$%^&*])(?=.{8,})");
+    const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+    if (strongRegex.test(value)) {
+        setBackgroundColor("#0F9D58");
+    } else if (mediumRegex.test(value)) {
+        setBackgroundColor("#F4B400");
+    } else {
+        setBackgroundColor("#DB4437");
+    }
+    };
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        analyze(newPassword); // Pour vérifier la force du mot de passe
+      };
+            
+      const ConfirmPwd = (confirmPass: string) => {
+        const confirmPassword = confirmPass
+        if (password === confirmPassword) {
+            setMdpValide(true);
+          } else {
+            setMdpValide(false);
+            alert("Les mots de passe ne sont pas identiques.");
+          }
+      };
+      
+      
+	async function SignUp(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+        // Valider l'email
+        if (!mailValide) {
+            alert("Adresse e-mail invalide.");
+            return;
+        }
+
+        // Valider le mot de passe
+        if (!mdpValide) {
+            alert("Les mots de passe ne sont pas identiques.");
+            return;
+        }
+		axios
+			.post("http://localhost:3001/api/auth/signup", {
+				firstname:firstname,
+                lastname: lastname,
+                email: email,
+				password: password,
+			})
+			.then((res) => {
+				if (res.status == 201) {
+					setShowSuccessToast(true);
+					setToastMessage("New account create successfully");
+						window.location.href = "/user/home";
+				} else {
+					setShowErrorToast(true);
+					setToastMessage(res.data.errors.msg);
+				}
+			})
+			.catch((err) => {
+				setShowErrorToast(true);
+				setToastMessage(err.response.data.errors.msg);
+			});
+            
+	}
+	return (
+		<IonPage className="signup-background">
+			<div className="ion-text">
+				<IonButton
+					slot='start'
+					onClick={()=>
+					window.location.href ='/'}
+				>
+					<img src="../../src/images/retour.png"/>
+				</IonButton>
+			</div>
+			<div className="md:w-[35em] md:m-auto my-auto">
+			
+				<h1 className="text-2xl text-center mb-6">
+					Créer un compte 
+				</h1>
+				<IonCard className="">
+					<IonCardContent>
+						<form onSubmit={SignUp}>
+							<IonItem>
+                                <IonLabel position="floating">Nom</IonLabel>
+								<IonInput
+									type="text"
+									onIonChange={(e) => {
+                                        setLastname(e.detail.value!);
+                                        }
+                                    }
+									required
+								></IonInput>
+                                <IonLabel position="floating">Prénom</IonLabel>
+								<IonInput
+									type="text"
+									onIonChange={(e) => {
+                                            setFirstname(e.detail.value!); 
+                                        }
+                                    }
+									required
+								></IonInput>
+                                <IonLabel position="floating">e-mail</IonLabel>
+                                <IonInput
+                                    type="email"
+                                    onIonChange={(e) => {
+                                        setEmail(e.detail.value!);
+                                        validationEmail(e.detail.value!);
+                                    }}
+                                >   
+                                </IonInput>
+                                <IonLabel position="floating"> Mot de passe </IonLabel>
+                                <IonInput
+                                    type="password"
+                                    onIonChange={handlePasswordChange}
+                                    style={{ backgroundColor: backgroundColor }}
+                                >
+                                </IonInput> 
+                                <IonLabel position="floating">Confirmation</IonLabel>
+                                <IonInput
+                                    type="password"
+                                    onIonChange={(e) => {
+                                        setConfirmPassword(e.detail.value!); // Assurez-vous que cette ligne met à jour l'état
+                                        ConfirmPwd(e.detail.value!); // Appelez confirmPwd ici
+                                    }
+                                }
+/>
+                     
+							</IonItem>
+							<IonButton
+								expand="block"
+								type="submit"
+								id="open-toast"
+								className="ion-margin-top"
+							>
+								S'inscrire
+						
+							</IonButton>
+							<IonToast
+								isOpen={showErrorToast}
+								onDidDismiss={() => setShowErrorToast(false)}
+								color="danger"
+								message={toastMessage}
+								duration={3000}
+								buttons={[
+									{
+										text: "Dismiss",
+										role: "cancel",
+									},
+								]}
+							/>
+							<IonToast
+								isOpen={showSuccessToast}
+								onDidDismiss={() => setShowSuccessToast(false)}
+								message="User create successful!"
+								duration={3000}
+								color="success"
+								buttons={[
+									{
+										text: "Dismiss",
+										role: "cancel",
+									},
+								]}
+							/>
+							<div className="border my-6 border-gray-500"> </div>
+						</form>
+					</IonCardContent>
+				</IonCard>
+			</div>
+		</IonPage>
+	);
+};
+
+export default SignUp;
