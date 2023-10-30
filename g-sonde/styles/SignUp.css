@@ -1,0 +1,9 @@
+/* about.css */
+.signup-background {
+  background-image: url('../src/images/fondMarin.jpg');
+  background-size: cover; /* Ajuste la taille de l'image pour couvrir tout le conteneur */
+  background-position: center; /* Centre l'image horizontalement et verticalement */
+  }
+
+
+
