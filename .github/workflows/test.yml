@@ -23,7 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - run: |
+      - name: start server and test it
+        run: |
           cd backend
           npm ci
           npm test
