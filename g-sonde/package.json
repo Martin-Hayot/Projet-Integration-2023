@@ -2,13 +2,14 @@
 	"name": "g-sonde",
 	"private": true,
 	"version": "0.0.1",
-	"type": "module",
+	"type": "commonjs",
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"build:css": "postcss tailwind.css -o styles/tailwind.css",
 		"watch:css": "postcss tailwind.css -o styles/tailwind.css -w",
 		"preview": "vite preview",
+		"test": "jest",
 		"test.e2e": "cypress run",
 		"test.unit": "vitest",
 		"lint": "eslint"
@@ -26,7 +27,7 @@
 		"@ionic/react-router": "^7.0.0",
 		"@types/react-router": "^5.1.20",
 		"@types/react-router-dom": "^5.3.3",
-		"axios": "^1.5.1",
+		"axios": "^1.6.0",
 		"ionicons": "^7.1.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
@@ -34,6 +35,7 @@
 		"react-router-dom": "^5.3.4"
 	},
 	"devDependencies": {
+		"@babel/preset-react": "^7.22.15",
 		"@capacitor/cli": "5.4.1",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^14.0.0",
@@ -49,6 +51,7 @@
 		"jsdom": "^22.1.0",
 		"postcss-cli": "^10.1.0",
 		"tailwindcss": "^3.3.3",
+		"ts-jest": "^29.1.1",
 		"typescript": "^5.1.6",
 		"vite": "^4.3.9",
 		"vitest": "^0.32.2"
