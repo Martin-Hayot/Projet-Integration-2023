@@ -19,6 +19,7 @@ import {
 	UserTicketsManager,
 } from "./pages";
 
+import Signup from "./pages/Signup";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
@@ -47,10 +48,10 @@ const App: React.FC = () => {
 		<IonApp>
 			<IonReactRouter>
 				<IonRouterOutlet>
-					<Route exact path={"/"}>
+				<Route exact path={"/"}>
 						<Home></Home>
 					</Route>
-					<Route path={"/user/dashboard"}>
+					<Route path={"/dashboard"}>
 						<DashboardPage></DashboardPage>
 					</Route>
 					<Route path={"/user/tickets"}>
@@ -73,6 +74,9 @@ const App: React.FC = () => {
 					</Route>
 					<Route path="/admin/category/manager">
 						<CategoryManager />
+					</Route>
+					<Route path={"/signup"}>
+						<Signup></Signup>
 					</Route>
 				</IonRouterOutlet>
 			</IonReactRouter>
