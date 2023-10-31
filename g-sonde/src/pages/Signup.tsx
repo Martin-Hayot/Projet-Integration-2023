@@ -61,7 +61,7 @@ const SignUp: React.FC = () => {
 			analyze(newPassword);
 		  }
 	  };
-	          
+	                
       const ConfirmPwd = (confirmPass: string) => {
         const confirmPassword = confirmPass
         if (password === confirmPassword) {
