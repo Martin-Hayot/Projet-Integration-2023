@@ -8,7 +8,8 @@ import {
 	IonPage,
 	IonToast,
 } from "@ionic/react";
-import { Browser } from "@capacitor/browser";
+
+import { IonInputCustomEvent, InputChangeEventDetail } from '@ionic/core';
 import React, { useState } from "react";
 import '../../../styles/SignUp.css'; // Assurez-vous d'utiliser le bon chemin vers votre fichier CSS
 
@@ -53,11 +54,14 @@ const SignUp: React.FC = () => {
     }
     };
 
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newPassword = e.target.value;
-        setPassword(newPassword);
-        analyze(newPassword); // Pour vérifier la force du mot de passe
-      };
+    const handlePasswordChange = (e: CustomEvent<InputChangeEventDetail>) => {
+		const newPassword = e.detail.value;
+		if (newPassword !== null && newPassword !== undefined) {
+			setPassword(newPassword);
+			analyze(newPassword);
+		  }
+	  };
+	  
             
       const ConfirmPwd = (confirmPass: string) => {
         const confirmPassword = confirmPass
