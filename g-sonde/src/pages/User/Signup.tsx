@@ -11,7 +11,6 @@ import {
 
 import { IonInputCustomEvent, InputChangeEventDetail } from '@ionic/core';
 import React, { useState } from "react";
-import '../../../styles/SignUp.css'; // Assurez-vous d'utiliser le bon chemin vers votre fichier CSS
 
 import axios from "axios";
 
@@ -112,7 +111,8 @@ const SignUp: React.FC = () => {
 	}
 	return (
 		<IonPage className="signup-background">
-			<div className="ion-text">
+			<div  class="bg-cover bg-center bg-no-repeat h-full" style={{ backgroundImage: "url('../src/images/fondMarin.jpg')" }}>
+			<div className="ion-text">	
 				<IonButton
 					slot='start'
 					onClick={()=>
@@ -214,6 +214,7 @@ const SignUp: React.FC = () => {
 						</form>
 					</IonCardContent>
 				</IonCard>
+			</div>
 			</div>
 		</IonPage>
 	);

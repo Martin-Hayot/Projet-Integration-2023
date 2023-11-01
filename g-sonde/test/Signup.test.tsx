@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import SignUp from '../src/pages/User/Signup'; // Importation du composant Signup
+const SignUp = require('../src/pages/User/Signup'); // Importation du composant Signup
 
 test('validationEmail valide une adresse e-mail correcte', () => {
   render(<SignUp />);
