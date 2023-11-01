@@ -116,6 +116,9 @@ router.get("/google/callback", async (req, res) => {
 		if (searchedUser !== null) {
 			return res.status(409).redirect("http://localhost:5173/login");
 		}
+		const password = await bcrypt.hash(googleUser.sub, 10);
+		const access_token = generateAccessToken({ email: googleUser.email });
+
 		const user = await User.findOneAndUpdate(
 			{
 				email: googleUser.email,
