@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-
+const { requireUser } = require("../middleware/auth");
 const AquariumData = require("../models/sonde/data");
 
-router.post("/", (req, res, next) => {
+router.post("/", requireUser, (req, res, next) => {
 	const aquariumData = new AquariumData({
 		...req.body,
 	});
@@ -13,8 +13,9 @@ router.post("/", (req, res, next) => {
 		.catch((error) => res.status(400).json({ error }));
 });
 
-router.get("/", (req, res, next) => {
-	AquariumData.find()
+router.get("/", requireUser, (req, res, next) => {
+	const diagnosticId = req.body.diagnosticId;
+	AquariumData.find({ diagnosticId: diagnosticId })
 		.then((aquariumData) => res.status(200).json(aquariumData))
 		.catch((error) => res.status(400).json({ error }));
 });
