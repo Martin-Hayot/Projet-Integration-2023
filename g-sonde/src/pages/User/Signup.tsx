@@ -111,7 +111,7 @@ const SignUp: React.FC = () => {
 	}
 	return (
 		<IonPage className="signup-background">
-			<div  class="bg-cover bg-center bg-no-repeat h-full" style={{ backgroundImage: "url('../src/images/fondMarin.jpg')" }}>
+			<div  className="bg-cover bg-center bg-no-repeat h-full" style={{ backgroundImage: "url('../src/images/fondMarin.jpg')" }}>
 			<div className="ion-text">	
 				<IonButton
 					slot='start'
