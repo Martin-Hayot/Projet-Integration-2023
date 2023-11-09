@@ -12,7 +12,7 @@ import {
 	isPlatform,
 } from '@ionic/react';
 import React from 'react';
-import Navbar from '../components/Navbar';
+import { Navbar } from '../components';
 import { Router } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
