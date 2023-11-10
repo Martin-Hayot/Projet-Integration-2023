@@ -7,36 +7,37 @@ import {
 	IonLabel,
 	IonPage,
 	IonToast,
+	IonHeader,
+	IonToolbar,
+	IonTitle,
+	IonButtons,
 } from "@ionic/react";
 
-import { IonInputCustomEvent, InputChangeEventDetail } from '@ionic/core';
+import { InputChangeEventDetail } from '@ionic/core';
 import React, { useState } from "react";
-
 import axios from "axios";
-
 
 const SignUp: React.FC = () => {
 	const [firstname, setFirstname] = useState("");
 	const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
 	const [password, setPassword] = useState(""); 
-    const [confirmPassword, setConfirmPassword] = useState("");            
+    const [ confirmPassword,setConfirmPassword] = useState("");            
 	const [toastMessage, setToastMessage] = useState("");
 	const [showErrorToast, setShowErrorToast] = useState(false);
 	const [showSuccessToast, setShowSuccessToast] = useState(false);
     const [mailValide, setMailValide] = useState(false);
     const [mdpValide, setMdpValide] = useState(false);
-    const [checkMail, setCheckMail] = useState(false);
     const [backgroundColor, setBackgroundColor] = useState("");
     
-    const validationEmail = (currentEmail:string) => {
+	const validationEmail = (currentEmail:string) => {
         const regularExpression = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         if (regularExpression.test(currentEmail)) {
             setMailValide(true);
-            console.log("Adresse mail valide.");
         } else {
             setMailValide(false);
-            alert("Adresse Mail invalide.");
+			setShowErrorToast(true)
+            setToastMessage("Adresse Mail invalide.");
         }
     };
     
@@ -60,30 +61,32 @@ const SignUp: React.FC = () => {
 			analyze(newPassword);
 		  }
 	  };
-	  
-            
+	          
       const ConfirmPwd = (confirmPass: string) => {
         const confirmPassword = confirmPass
         if (password === confirmPassword) {
             setMdpValide(true);
           } else {
             setMdpValide(false);
-            alert("Les mots de passe ne sont pas identiques.");
+            setShowErrorToast(true)
+			setToastMessage("Les mots de passe ne sont pas identiques.");
           }
       };
-      
-      
+    
+	
 	async function SignUp(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
         // Valider l'email
         if (!mailValide) {
-            alert("Adresse e-mail invalide.");
+			setShowErrorToast(true)
+            setToastMessage("Adresse e-mail invalide.");
             return;
         }
 
         // Valider le mot de passe
         if (!mdpValide) {
-            alert("Les mots de passe ne sont pas identiques.");
+			setShowErrorToast(true)
+			setToastMessage("Les mots de passe ne sont pas identiques.");
             return;
         }
 		axios
@@ -111,18 +114,18 @@ const SignUp: React.FC = () => {
 	}
 	return (
 		<IonPage className="signup-background">
-			<div  className="bg-cover bg-center bg-no-repeat h-full" style={{ backgroundImage: "url('../src/images/fondMarin.jpg')" }}>
-			<div className="ion-text">	
-				<IonButton
-					slot='start'
-					onClick={()=>
-					window.location.href ='/'}
-				>
-					<img src="../../src/images/retour.png"/>
-				</IonButton>
-			</div>
+		<IonHeader>
+			<IonToolbar>
+				<IonTitle>G-sonde</IonTitle>
+				<IonButtons slot="end">
+				<IonButton routerLink="/">Home</IonButton>
+				<IonButton routerLink="/about">About</IonButton>
+				<IonButton routerLink="/contact">Contact</IonButton>
+				</IonButtons>
+			</IonToolbar>
+    	</IonHeader>
+		<div className="bg-cover bg-center bg-no-repeat h-full" style={{ backgroundColor: "#F0F8FF", paddingTop:'20px' }}>
 			<div className="md:w-[35em] md:m-auto my-auto">
-			
 				<h1 className="text-2xl text-center mb-6">
 					Créer un compte 
 				</h1>
@@ -139,6 +142,8 @@ const SignUp: React.FC = () => {
                                     }
 									required
 								></IonInput>
+							</IonItem>
+							<IonItem>
                                 <IonLabel position="floating">Prénom</IonLabel>
 								<IonInput
 									type="text"
@@ -148,6 +153,8 @@ const SignUp: React.FC = () => {
                                     }
 									required
 								></IonInput>
+							</IonItem>
+							<IonItem>
                                 <IonLabel position="floating">e-mail</IonLabel>
                                 <IonInput
                                     type="email"
@@ -157,13 +164,17 @@ const SignUp: React.FC = () => {
                                     }}
                                 >   
                                 </IonInput>
+							</IonItem>
+							<IonItem>
                                 <IonLabel position="floating"> Mot de passe </IonLabel>
                                 <IonInput
                                     type="password"
                                     onIonChange={handlePasswordChange}
                                     style={{ backgroundColor: backgroundColor }}
                                 >
-                                </IonInput> 
+                                </IonInput>
+							</IonItem>
+							<IonItem> 
                                 <IonLabel position="floating">Confirmation</IonLabel>
                                 <IonInput
                                     type="password"
@@ -172,8 +183,7 @@ const SignUp: React.FC = () => {
                                         ConfirmPwd(e.detail.value!); // Appelez confirmPwd ici
                                     }
                                 }
-/>
-                     
+								></IonInput>
 							</IonItem>
 							<IonButton
 								expand="block"
