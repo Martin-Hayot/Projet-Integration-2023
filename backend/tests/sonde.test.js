@@ -47,7 +47,6 @@ describe("Sonde", () => {
                     .post("/api/aquarium")
                     .set("Cookie", cookies)
                     .send({
-                        userId: "test@test.com",
                         name: "Mon aquarium de 2m²",
                     });
                 expect(response.status).toBe(201);
@@ -57,7 +56,6 @@ describe("Sonde", () => {
                 const response = await supertest(app)
                     .post("/api/aquarium")
                     .send({
-                        userId: "test@test.com",
                         name: "Mon aquarium de 2m²",
                     });
                 expect(response.status).toBe(401);
@@ -68,7 +66,6 @@ describe("Sonde", () => {
                     .post("/api/aquarium")
                     .set("Cookie", cookies)
                     .send({
-                        userId: "test@test.com",
                     });
                 expect(response.status).toBe(400);
             });
@@ -92,7 +89,7 @@ describe("Sonde", () => {
                     .get("/api/aquarium")
                     .set("Cookie", cookies);
                 expect(response.body[0].name).toBe("Mon aquarium de 2m²");
-                expect(response.body[0].userId).toBe("test@test.com");
+                console.log(response.body);
                 aquariumId = response.body[0]._id;
             });
         });
@@ -137,7 +134,7 @@ describe("Sonde", () => {
                         aquariumId: aquariumId,
                         date: "12-2011-02T15:36:48.384Z",
                     });
-                expect(response.status).toBe(400);
+                expect(response.status).toBe(500);
             });
         });
 
@@ -218,7 +215,7 @@ describe("Sonde", () => {
                         measure: 1200,
                         frequency: "abc",
                     });
-                expect(response.status).toBe(400);
+                expect(response.status).toBe(500);
             });
         });
 

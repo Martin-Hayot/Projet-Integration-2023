@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const diagnosticSchema = mongoose.Schema({
-    aquariumId: { type: mongoose.ObjectId, required: true },
+    aquariumId: { type: mongoose.Schema.Types.ObjectId, ref: 'Aquarium', required: true },
     date: { type: Date, required: true },
 });
 

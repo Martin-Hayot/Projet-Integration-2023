@@ -3,19 +3,31 @@ const router = express.Router();
 const { requireUser } = require("../middleware/auth");
 const AquariumData = require("../models/sonde/data");
 
-router.post("/", requireUser, (req, res, next) => {
+router.post("/", requireUser, async (req, res) => {
+	const { diagnosticId } = req.body;
+	const { measure } = req.body;
+	const { frequency } = req.body;
+	if (!diagnosticId || !measure || !frequency) {
+		return res.status(400).json({ message: "All entries are required" });
+	}
 	const aquariumData = new AquariumData({
-		...req.body,
+		diagnosticId,
+		measure,
+		frequency,
 	});
-	aquariumData
-		.save()
-		.then(() => res.status(201).json({ message: "Data enregistré !" }))
-		.catch((error) => res.status(400).json({ error }));
+
+	try {
+		await aquariumData.save();
+		res.status(201).json({ message: "Data created successfully" });
+	} catch (e) {
+		console.log("Error : ", e);
+		res.status(500).json({ message: e });
+	}
 });
 
-router.get("/", requireUser, (req, res, next) => {
-	const diagnosticId = req.body.diagnosticId;
-	AquariumData.find({ diagnosticId: diagnosticId })
+router.get("/", requireUser, async (req, res) => {
+	const { diagnosticId } = req.body;
+	await AquariumData.find({ diagnosticId: diagnosticId })
 		.then((aquariumData) => res.status(200).json(aquariumData))
 		.catch((error) => res.status(400).json({ error }));
 });
