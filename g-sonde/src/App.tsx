@@ -8,7 +8,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import DashboardPage from "./pages/User/DashboardPage";
+import DashboardPage from "./pages/DashboardPage";
 import Login from "./pages/Login";
 import Signup from "./pages/User/Signup"
 import Aquarium from "./pages/Aquarium";
