@@ -6,20 +6,13 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import DashboardPage from "./pages/User/DashboardPage";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup"
+import Aquarium from "./pages/Aquarium";
 
-import {
-	Home,
-	About,
-	Login,
-	Aquarium,
-	//Signup,
-	DashboardPage,
-	ContactUs,
-	TicketsViewer,
-	CategoryManager,
-	UserTicketsManager,
-} from "./pages";
-import Signup from'./pages/Signup'
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 

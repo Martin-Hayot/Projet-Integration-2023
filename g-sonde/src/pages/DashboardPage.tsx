@@ -12,15 +12,11 @@ import {
 	IonToolbar,
 	isPlatform,
 } from '@ionic/react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import React from 'react';
-import { UserContext } from '../../components';
 
 const DashboardPage: React.FC = () => {
-	const { logout } = React.useContext(UserContext);
-	async function localLogout() {
-		logout();
+	async function logout() {
 		window.location.href = '/';
 	}
 	const [data, setData] = React.useState();
@@ -48,10 +44,7 @@ const DashboardPage: React.FC = () => {
 				</IonHeader>
 				<IonContent className='ion-padding'>
 					This is the menu content.
-					<div>
-						<Link to={'/contact'}>Contact</Link>
-					</div>
-					<IonButton expand='block' onClick={localLogout}>
+					<IonButton expand='block' onClick={logout}>
 						Logout
 					</IonButton>
 				</IonContent>
