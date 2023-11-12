@@ -8,7 +8,10 @@ const rateLimiter = require("./middleware/rate-limiter");
 const { deserializeUser } = require("./middleware/auth");
 const userRoute = require("./routes/User");
 const authRoute = require("./routes/auth");
-const aquariumDataRoute = require("./routes/data");
+const aquariumDataRoute = require("./routes/Aquarium");
+const measureRoute = require("./routes/Measure")
+const diagnosticRoutes = require("./routes/Diagnostic")
+const chemicalComponent = require("./routes/ChemicalComponent")
 
 mongoose
 	.connect(process.env.DATABASE_ACCESS)
@@ -30,9 +33,13 @@ app.use(
 		credentials: true,
 	})
 );
+  
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/aquarium/data", aquariumDataRoute);
+app.use("/api/chemicalComponent", chemicalComponent);
+app.use("/api/diagnostic", diagnosticRoutes)
+app.use("/api/measureRoute", measureRoute)
 
 module.exports = app;
