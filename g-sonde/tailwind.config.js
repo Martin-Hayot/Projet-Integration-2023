@@ -2,9 +2,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ["./src/**/*.{js,jsx,jsx,ts,tsx,css}"],
-	darkMode: "media",
+	darkMode: "class",
 	theme: {
 		extend: {},
+		backgroundImage: {
+			'aquarium': "url('aquarium2-compressed-full.jpg')",
+		},
 	},
 	variants: {
 		extend: {},
