@@ -29,4 +29,30 @@ router.get("/", requireUser, async (req, res) => {
         .catch((error) => res.status(400).json({ error }));
 });
 
+// Nouvelle route pour la suppression d'un aquarium
+router.delete("/delete", requireUser, async (req, res) => {
+    const { userId } = req.user;
+    const { aquariumId } = req.body;
+
+    if (!aquariumId) {
+        return res.status(400).json({ message: "no aquarium" });
+    }
+
+    try {
+        const deletedAquarium = await Aquarium.findOneAndDelete({
+            _id: aquariumId,
+            userId: userId,
+        });
+
+        if (!deletedAquarium) {
+            return res.status(404).json({ message: "Aquarium not found" });
+        }
+
+        res.status(200).json({ message: "Aquarium deleted successfully" });
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ message: error });
+    }
+});
+
 module.exports = router;
