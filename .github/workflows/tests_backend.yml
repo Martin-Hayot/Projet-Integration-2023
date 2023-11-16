@@ -1,6 +1,6 @@
-name: Run tests
+name: Run Backend Tests
 
-on: 
+on:
   push:
     branches: [master, main, Develop]
   pull_request:

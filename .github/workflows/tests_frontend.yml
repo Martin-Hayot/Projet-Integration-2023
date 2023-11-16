@@ -1,4 +1,4 @@
-name: Run tests
+name: Run Frontend Tests
 
 on:
   push:
@@ -23,17 +23,27 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - name: start frontend tests end-to-end
+
+      - name: Run API in Background
+        working-directory: ./backend
         run: |
-          cd ./backend
           npm ci
-          npm run dev
-          cd ../g-sonde
+          npm run dev &
+          echo $! > api_pid.txt
+
+      - name: start frontend tests end-to-end
+        working-directory: ./g-sonde
+        run: |
           npm ci
           npm run test.e2e
 
       - name: start frontend unit tests
+        working-directory: ./g-sonde
         run: |
-          cd ./g-sonde
           npm ci
           npm run test.unit
+
+      - name: Stop API
+        working-directory: ./backend
+        run: |
+          kill -9 $(cat ../g-sonde/api_pid.txt)
