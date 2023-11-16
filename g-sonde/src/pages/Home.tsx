@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 
 const isDesktop = isPlatform("desktop");
 
-const Home: React.FC = () => {
+const Dashboard: React.FC = () => {
 	return (
 		<>
 			{isDesktop ? (
@@ -38,8 +38,10 @@ const Home: React.FC = () => {
 								<li>
 									<Link to="/contact">Contact</Link>
 								</li>
+								<li>
+									<Link to="/dashboard"> Dashboard</Link>
+								</li>
 							</ul>
-
 							<div className="mx-12">
 								<IonButton className="mr-8" routerLink="/login">
 									Log in
@@ -91,4 +93,4 @@ const Home: React.FC = () => {
 	);
 };
 
-export default Home;
+export default Dashboard;

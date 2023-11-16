@@ -5,10 +5,10 @@ import {
 	setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import { Route } from "react-router-dom";
 import About from "./pages/About";
-import DashboardPage from "./pages/User/DashboardPage";
+import Home from "./pages/Home"
+import Dashboard from "./pages/User/Dashboard";
 import Login from "./pages/Login";
 import Signup from "./pages/User/Signup"
 import Aquarium from "./pages/Aquarium";
@@ -33,10 +33,12 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 import "../styles/tailwind.css";
+import React, { useState } from 'react';
 
 setupIonicReact();
 
 const App: React.FC = () => {
+	const [accessToken, setAccessToken] = useState<string | null>(null);
 	return (
 		<IonApp>
 			<IonReactRouter>
@@ -44,8 +46,8 @@ const App: React.FC = () => {
 					<Route exact path={"/"}>
 						<Home></Home>
 					</Route>
-					<Route path={"/user/home"}>
-						<DashboardPage></DashboardPage>
+					<Route path={"/dashboard"}>
+						<Dashboard></Dashboard>
 					</Route>
 					<Route path={"/aquarium"}>
 						<Aquarium></Aquarium>

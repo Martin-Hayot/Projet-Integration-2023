@@ -42,9 +42,9 @@ router.post("/login", async (req, res) => {
 		return res.status(400).json({ message: "Email and password are required" });
 
 	try {
-		const searchedUser = await User.exists({ email: user.email }).select(
-			"password"
-		);
+		const searchedUser = await User.findOne({ email: user.email }).select(
+            "_id password"
+        );
 		if (searchedUser == null) {
 			return res.status(401).json({ message: "User not found" });
 		}
@@ -53,10 +53,12 @@ router.post("/login", async (req, res) => {
 				userId: searchedUser._id,
 				email: user.email,
 			});
+			
 			const refresh_token = generateRefreshToken({
 				userId: searchedUser._id,
 				email: user.email,
 			});
+
 			res.cookie("accessToken", accessToken, {
 				httpOnly: true,
 				maxAge: 3.154e10,
@@ -65,7 +67,12 @@ router.post("/login", async (req, res) => {
 				httpOnly: true,
 				maxAge: 3.154e10,
 			});
-			res.status(200).json({ message: "Logged in successfully" });
+			res.status(200).json({ 
+				message: "Logged in successfully",
+				userId: searchedUser._id,
+				accessToken: accessToken,
+				refresh_token: refresh_token
+			});
 		} else {
 			res.status(401).json({ message: "Invalid credentials" });
 		}

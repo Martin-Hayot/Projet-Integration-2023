@@ -36,10 +36,13 @@ const Login: React.FC = () => {
 			)
 			.then((res) => {
 				if (res.status == 200) {
+					// Stock l'ID utilisateur dans le localStorage après la connexion réussie
+					localStorage.setItem("userId", res.data.userId);
+					console.log('Voici l\'ID' + res.data.userId)
 					setShowSuccessToast(true);
 					setToastMessage("Logged in successfully");
 					sleep(1000).then(() => {
-						window.location.href = "/user/home";
+						window.location.href = "/dashboard";
 					});
 				} else {
 					setShowErrorToast(true);
