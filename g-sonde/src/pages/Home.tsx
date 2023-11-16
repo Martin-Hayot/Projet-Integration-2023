@@ -22,6 +22,12 @@ const isDesktop = isPlatform("desktop");
 
 const Home: React.FC = () => {
 	const history = useHistory();
+
+	const handleLinkClick = (path: string) => {
+		history.push(path);
+		window.location.reload();
+	  };
+
 	return (
 		<>
 			{isDesktop ? (

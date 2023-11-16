@@ -5,7 +5,7 @@ import {
 	setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import DashboardPage from "./pages/User/DashboardPage";
@@ -37,28 +37,32 @@ setupIonicReact();
 
 const App: React.FC = () => {
 	return (
-		<IonApp>
-			<IonReactRouter>
-				<IonRouterOutlet>
-					<Route exact path={"/"}>
-						<Home></Home>
-					</Route>
-					<Route path={"/user/home"}>
-						<DashboardPage></DashboardPage>
-					</Route>
-					<Route path={"/aquarium"}>
-						<Aquarium></Aquarium>
-					</Route>
-					<Route path={"/login"}>
-						<Login></Login>
-					</Route>
-					<Route path={"/about"}>
-						<About></About>
-					</Route>
-				</IonRouterOutlet>
-			</IonReactRouter>
-		</IonApp>
+	  <IonApp>
+		<IonReactRouter>
+		  <IonRouterOutlet>
+			<Switch>
+			  <Route exact path="/">
+				<Home />
+			  </Route>
+			  <Route path="/user/home">
+				<DashboardPage />
+			  </Route>
+			  <Route path="/aquarium">
+				<Aquarium />
+			  </Route>
+			  <Route path="/login">
+				<Login />
+			  </Route>
+			  <Route path="/about">
+				<About />
+			  </Route>
+			  {/* Redirection par défaut */}
+			  <Redirect to="/" />
+			</Switch>
+		  </IonRouterOutlet>
+		</IonReactRouter>
+	  </IonApp>
 	);
-};
-
-export default App;
+  };
+  
+  export default App;
