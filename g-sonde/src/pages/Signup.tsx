@@ -100,7 +100,7 @@ const SignUp: React.FC = () => {
 				if (res.status == 201) {
 					setShowSuccessToast(true);
 					setToastMessage("New account create successfully");
-						window.location.href = "/user/home";
+						window.location.href = "/login";
 				} else {
 					setShowErrorToast(true);
 					setToastMessage(res.data.errors.msg);
