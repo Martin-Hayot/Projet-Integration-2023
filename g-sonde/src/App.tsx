@@ -10,7 +10,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import DashboardPage from "./pages/DashboardPage";
 import Login from "./pages/Login";
-import Signup from "./pages/User/Signup"
+import Signup from "./pages/Signup"
 import Aquarium from "./pages/Aquarium";
 
 /* Core CSS required for Ionic components to work properly */
