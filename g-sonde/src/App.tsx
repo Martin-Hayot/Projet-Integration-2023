@@ -7,11 +7,10 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { Route } from "react-router-dom";
 import About from "./pages/About";
-
-import Home from "./pages/DashboardPage";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup"
+import { Home } from "./pages";
+import Signup from "./pages/Signup";
 import Aquarium from "./pages/Aquarium";
 
 /* Core CSS required for Ionic components to work properly */
