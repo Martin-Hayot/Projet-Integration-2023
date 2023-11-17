@@ -7,34 +7,33 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { Route } from "react-router-dom";
 import About from "./pages/About";
-import Home from "./pages/Home"
-import Dashboard from "./pages/User/Dashboard";
+
+import Home from "./pages/DashboardPage";
+import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import Signup from "./pages/User/Signup"
+import Signup from "./pages/Signup"
 import Aquarium from "./pages/Aquarium";
 
 /* Core CSS required for Ionic components to work properly */
-import "@ionic/react/css/core.css";
+import '@ionic/react/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-import "@ionic/react/css/normalize.css";
-import "@ionic/react/css/structure.css";
-import "@ionic/react/css/typography.css";
+import '@ionic/react/css/normalize.css';
+import '@ionic/react/css/structure.css';
+import '@ionic/react/css/typography.css';
 
 /* Optional CSS utils that can be commented out */
-import "@ionic/react/css/padding.css";
-import "@ionic/react/css/float-elements.css";
-import "@ionic/react/css/text-alignment.css";
-import "@ionic/react/css/text-transformation.css";
-import "@ionic/react/css/flex-utils.css";
-import "@ionic/react/css/display.css";
+import '@ionic/react/css/padding.css';
+import '@ionic/react/css/float-elements.css';
+import '@ionic/react/css/text-alignment.css';
+import '@ionic/react/css/text-transformation.css';
+import '@ionic/react/css/flex-utils.css';
+import '@ionic/react/css/display.css';
 
 /* Theme variables */
-import "./theme/variables.css";
-
+import './theme/variables.css';
 import "../styles/tailwind.css";
 import React, { useState } from 'react';
-
 setupIonicReact();
 
 const App: React.FC = () => {
@@ -43,19 +42,19 @@ const App: React.FC = () => {
 		<IonApp>
 			<IonReactRouter>
 				<IonRouterOutlet>
-					<Route exact path={"/"}>
+					<Route exact path={'/'}>
 						<Home></Home>
 					</Route>
 					<Route path={"/dashboard"}>
 						<Dashboard></Dashboard>
 					</Route>
-					<Route path={"/aquarium"}>
+					<Route path={'/aquarium'}>
 						<Aquarium></Aquarium>
 					</Route>
-					<Route path={"/login"}>
+					<Route path={'/login'}>
 						<Login></Login>
 					</Route>
-					<Route path={"/about"}>
+					<Route path={'/about'}>
 						<About></About>
 					</Route>
 					<Route path={"/signup"}>
