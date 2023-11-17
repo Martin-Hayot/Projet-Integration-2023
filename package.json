@@ -1,9 +1,0 @@
-{
-  "devDependencies": {
-    "@types/jest": "^29.5.7",
-    "@types/node": "^20.8.9"
-  },
-  "dependencies": {
-    "react-toastify": "^9.1.3"
-  }
-}
