@@ -1,0 +1,25 @@
+/* Styles for the desktop header */
+.flex {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .text-3xl {
+    font-size: 1.875rem; /* 30px */
+    margin: 1.5rem; /* 24px */
+  }
+  
+  .text-2xl {
+    font-size: 1.5rem; /* 24px */
+    margin: 1.5rem; /* 24px */
+  }
+  
+  ul {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+  }
+  
+  .mr-8 {
+    margin-right: 0.5rem; /* 8px */
+  }

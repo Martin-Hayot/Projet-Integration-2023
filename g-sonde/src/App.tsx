@@ -3,10 +3,15 @@ import {
 	IonRouterOutlet,
 	IonSplitPane,
 	setupIonicReact,
-} from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
-import { Home, About, Login, Aquarium, DashboardPage } from './pages';
+} from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import { Route } from "react-router-dom";
+import About from "./pages/About";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import { Home } from "./pages";
+import Signup from "./pages/Signup";
+import Aquarium from "./pages/Aquarium";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -26,12 +31,12 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-
-import '../styles/tailwind.css';
-
+import "../styles/tailwind.css";
+import React, { useState } from 'react';
 setupIonicReact();
 
 const App: React.FC = () => {
+	const [accessToken, setAccessToken] = useState<string | null>(null);
 	return (
 		<IonApp>
 			<IonReactRouter>
@@ -39,8 +44,8 @@ const App: React.FC = () => {
 					<Route exact path={'/'}>
 						<Home></Home>
 					</Route>
-					<Route path={'/user/home'}>
-						<DashboardPage></DashboardPage>
+					<Route path={"/dashboard"}>
+						<Dashboard></Dashboard>
 					</Route>
 					<Route path={'/aquarium'}>
 						<Aquarium></Aquarium>
@@ -50,6 +55,9 @@ const App: React.FC = () => {
 					</Route>
 					<Route path={'/about'}>
 						<About></About>
+					</Route>
+					<Route path={"/signup"}>
+						<Signup></Signup>
 					</Route>
 				</IonRouterOutlet>
 			</IonReactRouter>
