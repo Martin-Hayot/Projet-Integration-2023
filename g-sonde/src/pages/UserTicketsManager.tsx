@@ -1,8 +1,8 @@
 import { IonPage, IonToast } from "@ionic/react";
-import { Navbar, Ticket, UserContext } from "../../components";
+import { Navbar, Ticket, UserContext } from "../components";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { TicketProps } from "../../types";
+import { TicketProps } from "../types";
 
 const UserTicketsManager: React.FC = () => {
 	const [tickets, setTickets] = useState<TicketProps[]>([]);

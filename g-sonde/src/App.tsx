@@ -5,13 +5,21 @@ import {
 	setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import DashboardPage from "./pages/User/DashboardPage";
-import Login from "./pages/Login";
+import { Route } from "react-router-dom";
+import{
+	Home,
+	About,
+	Login,
+	DashboardPage,
+	Aquarium,
+	UserTicketsManager,
+	CategoryManager,
+	ContactUs,
+	TicketsViewer
+
+}  from "./pages";
+
 import Signup from "./pages/Signup"
-import Aquarium from "./pages/Aquarium";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -30,9 +38,9 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
 /* Theme variables */
-import "./theme/variables.css";
+import './theme/variables.css';
 
-import "../styles/tailwind.css";
+import '../styles/tailwind.css';
 
 setupIonicReact();
 
