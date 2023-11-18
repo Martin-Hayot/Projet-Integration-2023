@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const rateLimiter = require("./middleware/rate-limiter");
 const { deserializeUser } = require("./middleware/auth");
 const userRoute = require("./routes/User");
 const authRoute = require("./routes/auth");
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(deserializeUser);
+app.use(rateLimiter);
 app.use(
 	cors({
 		origin: "http://localhost:5173",
