@@ -8,7 +8,8 @@ const rateLimiter = require("./middleware/rate-limiter");
 const { deserializeUser } = require("./middleware/auth");
 const userRoute = require("./routes/User");
 const authRoute = require("./routes/auth");
-const aquariumDataRoute = require("./routes/data");
+const aquariumRoute = require("./routes/aquarium");
+
 
 mongoose
 	.connect(process.env.DATABASE_ACCESS)
@@ -33,6 +34,6 @@ app.use(
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
-app.use("/api/aquarium/data", aquariumDataRoute);
+app.use("/api/aquarium", aquariumRoute);
 
 module.exports = app;
