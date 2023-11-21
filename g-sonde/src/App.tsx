@@ -5,7 +5,7 @@ import {
 	setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { Home, About, Login, Aquarium, DashboardPage } from './pages';
 
 /* Core CSS required for Ionic components to work properly */
@@ -36,21 +36,23 @@ const App: React.FC = () => {
 		<IonApp>
 			<IonReactRouter>
 				<IonRouterOutlet>
-					<Route exact path={'/'}>
-						<Home></Home>
+					<Switch>
+						<Route exact path={'/'}>
+							<Home></Home>
+						</Route>
+						<Route path={'/user/home'}>
+							<DashboardPage></DashboardPage>
+						</Route>
+						<Route path={'/aquarium'}>
+							<Aquarium></Aquarium>
+						</Route>
+						<Route path={'/login'}>
+							<Login></Login>
+						</Route>
+						<Route path={'/about'}>
+							<About></About>
 					</Route>
-					<Route path={'/user/home'}>
-						<DashboardPage></DashboardPage>
-					</Route>
-					<Route path={'/aquarium'}>
-						<Aquarium></Aquarium>
-					</Route>
-					<Route path={'/login'}>
-						<Login></Login>
-					</Route>
-					<Route path={'/about'}>
-						<About></About>
-					</Route>
+					</Switch>
 				</IonRouterOutlet>
 			</IonReactRouter>
 		</IonApp>
