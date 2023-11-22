@@ -10,10 +10,9 @@ import {
 	IonToast,
 } from "@ionic/react";
 import { Browser } from "@capacitor/browser";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { logInOutline, personCircleOutline } from "ionicons/icons";
 import axios from "axios";
-import { UserContext } from "../components";
 
 const Login: React.FC = () => {
 	const [email, setEmail] = useState("");
@@ -21,12 +20,11 @@ const Login: React.FC = () => {
 	const [toastMessage, setToastMessage] = useState("");
 	const [showErrorToast, setShowErrorToast] = useState(false);
 	const [showSuccessToast, setShowSuccessToast] = useState(false);
-	const { setEmailUser, setAbilityUser } = React.useContext(UserContext);
 
 	async function logIn(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		try {
-			const res = await axios.post(
+		axios
+			.post(
 				"http://localhost:3001/api/auth/login",
 				{
 					email: email,
@@ -35,24 +33,23 @@ const Login: React.FC = () => {
 				{
 					withCredentials: true,
 				}
-			);
-			if (res.status == 200) {
-				setEmailUser(email);
-				setShowSuccessToast(true);
-				const data = await res.data;
-				setToastMessage(data.message);
-				setAbilityUser(data.ability);
-				sleep(1000).then(() => {
-					window.location.href = "/user/dashboard";
-				});
-			} else {
+			)
+			.then((res) => {
+				if (res.status == 200) {
+					setShowSuccessToast(true);
+					setToastMessage("Logged in successfully");
+					sleep(1000).then(() => {
+						window.location.href = "/user/home";
+					});
+				} else {
+					setShowErrorToast(true);
+					setToastMessage(res.data.message);
+				}
+			})
+			.catch((err) => {
 				setShowErrorToast(true);
-				setToastMessage(res.data.message);
-			}
-		} catch (err: any) {
-			setShowErrorToast(true);
-			setToastMessage(err.message);
-		}
+				setToastMessage(err.response.data.message);
+			});
 	}
 
 	async function getGoogleOAuthUrl() {
@@ -68,18 +65,6 @@ const Login: React.FC = () => {
 	function sleep(ms: number | undefined) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
-
-	useEffect(() => {
-		const params = new URLSearchParams(window.location.search);
-
-		const error = params.get("error");
-		if (error) {
-			setShowErrorToast(true);
-			if (error === "unauthorized") {
-				setToastMessage("You're not authorized to view the page");
-			}
-		}
-	}, []);
 	return (
 		<IonPage>
 			<div className="md:w-[35em] md:m-auto my-auto">
@@ -90,26 +75,27 @@ const Login: React.FC = () => {
 					<IonCardContent>
 						<form onSubmit={logIn}>
 							<IonItem>
+								<IonLabel position="floating">Email</IonLabel>
 								<IonInput
-									label="Email"
-									labelPlacement="floating"
 									type="email"
 									onIonChange={(e) => setEmail(e.detail.value!)}
-									required></IonInput>
+									required
+								></IonInput>
 							</IonItem>
 							<IonItem>
+								<IonLabel position="floating">Password</IonLabel>
 								<IonInput
-									label="Password"
-									labelPlacement="floating"
 									type="password"
 									required
-									onIonChange={(e) => setPassword(e.detail.value!)}></IonInput>
+									onIonChange={(e) => setPassword(e.detail.value!)}
+								></IonInput>
 							</IonItem>
 							<IonButton
 								expand="block"
 								type="submit"
 								id="open-toast"
-								className="ion-margin-top">
+								className="ion-margin-top"
+							>
 								Login
 								<IonIcon icon={logInOutline} slot="end" className="mb-1" />
 							</IonButton>
@@ -143,18 +129,21 @@ const Login: React.FC = () => {
 								expand="block"
 								type="button"
 								color={"secondary"}
-								routerLink="/register">
+								routerLink="/register"
+							>
 								Create Account
 								<IonIcon
 									icon={personCircleOutline}
-									className="mb-1 ml-1"></IonIcon>
+									className="mb-1 ml-1"
+								></IonIcon>
 							</IonButton>
 							<div className="border my-6 border-gray-500"> </div>
 						</form>
 						<IonButton
 							expand="block"
 							onClick={handleGoogleLogin}
-							color={"tertiary"}>
+							color={"tertiary"}
+						>
 							Google
 						</IonButton>
 					</IonCardContent>
