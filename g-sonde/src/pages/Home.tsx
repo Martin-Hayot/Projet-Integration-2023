@@ -25,7 +25,7 @@ const Home: React.FC = () => {
 		<>
 			{isDesktop ? (
 				// Render desktop-specific content
-				<div>
+				<div id='home-desktop-content'>
 					<Navbar />
 					<section className='bg-aquarium dark:bg-aquarium mx-auto text-center h-screen bg-cover bg-center bg-no-repeat relative'>
 						<h1 className='text-5xl pt-[8%] mb-6 text-white'>Desktop Home</h1>

@@ -27,6 +27,35 @@ function requireUser(req, res, next) {
 	return next();
 }
 
+async function requireAdmin(req, res, next) {
+	/**
+	 * @description Check if the user object is set in the request and return an error if not
+	 * @param {express.Request} req
+	 * @param {express.Response} res
+	 * @param {express.NextFunction} next
+	 */
+	if (!req.user) {
+		return res.status(401).json({
+			message: "Unauthorized - User not logged in",
+			authenticated: false,
+		});
+	}
+	const { email } = req.user;
+	searchedUser = await User.findOne({ email: email }).select("ability");
+	if (!searchedUser) {
+		return res.status(404).json({
+			message: "Not Found - User",
+			authenticated: false,
+		});
+	}
+	if (searchedUser.ability !== 1) {
+		return res
+			.status(401)
+			.json({ message: "Unauthorized - Not Admin", authenticated: false });
+	}
+	return next();
+}
+
 async function deserializeUser(req, res, next) {
 	/**
 	 * @description Check if the user is authenticated and set the user object in the request
@@ -122,4 +151,4 @@ async function deserializeUser(req, res, next) {
 	return next();
 }
 
-module.exports = { requireUser, deserializeUser };
+module.exports = { requireUser, deserializeUser, requireAdmin };
