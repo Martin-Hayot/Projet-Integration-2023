@@ -1,0 +1,61 @@
+@keyframes menu-transition {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+#menu {
+    animation: menu-transition 0.5s ease-in-out;
+    width: 100%; /* This will make the menu take up the full width of the screen */
+    margin-left: auto; /* These two lines will center the menu horizontally */
+    margin-right: auto;
+}
+
+.hamburger {
+    width: 24px;
+    height: 24px;
+    transition: all 0.25s;
+    position: relative;
+    cursor: pointer;
+}
+
+.hamburger-top,
+.hamburger-middle,
+.hamburger-bottom {
+    position: absolute;
+    background: #fff;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 24px;
+    height: 2px;
+    transform: rotate(0);
+    transition: all 0.5s;
+}
+
+.hamburger-middle {
+    transform: translateY(7px);
+}
+
+.hamburger-bottom {
+    transform: translateY(14px);
+}
+
+.open {
+    transform: rotate(90deg);
+}
+
+.open .hamburger-top {
+    transform: rotate(45deg) translateY(6px) translateX(6px);
+}
+
+.open .hamburger-middle {
+    display: none;
+}
+
+.open .hamburger-bottom {
+    transform: rotate(-45deg) translateY(6px) translateX(-6px);
+}
