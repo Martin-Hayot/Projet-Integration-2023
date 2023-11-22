@@ -6,14 +6,10 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const rateLimiter = require("./middleware/rate-limiter");
 const { deserializeUser } = require("./middleware/auth");
+const userRoute = require("./routes/User");
+const authRoute = require("./routes/auth");
+const aquariumRoute = require("./routes/aquarium");
 
-const {
-	userRoute,
-	authRoute,
-	aquariumRoute,
-	ticketRoute,
-	categoryRoute,
-} = require("./routes");
 
 mongoose
 	.connect(process.env.DATABASE_ACCESS)
@@ -38,8 +34,6 @@ app.use(
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
-app.use("/api/ticket", ticketRoute);
-app.use("/api/category", categoryRoute);
 app.use("/api/aquarium", aquariumRoute);
 
 module.exports = app;
