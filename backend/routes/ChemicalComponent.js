@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const ChemicalComponent = require("../models/ChemicalComponenent");
+const ChemicalComponent = require("../models/ChemicalComponent");
 
 // Liste des composants chimiques
 router.get("/", (req, res) => {

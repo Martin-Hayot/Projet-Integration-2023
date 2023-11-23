@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const Resend = require('resend')
 const cookieParser = require("cookie-parser");
 const rateLimiter = require("./middleware/rate-limiter");
 const { deserializeUser } = require("./middleware/auth");
@@ -47,6 +48,9 @@ const verifyAccessToken = (req, res, next) => {
 	res.json({ message: "This is a protected route", user: req.user });
   });
   */
+ ////////
+////////
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -59,7 +63,6 @@ app.use(
 		credentials: true,
 	})
 );
-  
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);

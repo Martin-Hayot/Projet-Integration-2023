@@ -21,5 +21,8 @@ const diagnosticSchema = mongoose.Schema({
     }
 });
 
+// Index composite sur mesure et chemicalComponent
+diagnosticSchema.index({ mesure: 1, chemicalComponent: 1 }, { unique: true });
+
 module.exports = mongoose.model("Diagnostic", diagnosticSchema);
 
