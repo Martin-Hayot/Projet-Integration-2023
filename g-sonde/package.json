@@ -41,7 +41,7 @@
 		"@types/jest": "^29.5.8",
 		"@types/react": "^18.0.27",
 		"@types/react-dom": "^18.0.10",
-		"@vitejs/plugin-legacy": "^4.0.2",
+		"@vitejs/plugin-legacy": "^4.1.1",
 		"@vitejs/plugin-react": "^4.0.1",
 		"autoprefixer": "^10.4.16",
 		"cypress": "^13.5.0",
