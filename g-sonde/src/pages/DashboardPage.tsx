@@ -15,7 +15,7 @@ import {
 import axios from 'axios';
 import React from 'react';
 
-const DashboardPage: React.FC = () => {
+const Dashboard: React.FC = () => {
 	async function logout() {
 		window.location.href = '/';
 	}
@@ -69,4 +69,4 @@ const DashboardPage: React.FC = () => {
 	);
 };
 
-export default DashboardPage;
+export default Dashboard;

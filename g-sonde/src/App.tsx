@@ -3,23 +3,10 @@ import {
 	IonRouterOutlet,
 	IonSplitPane,
 	setupIonicReact,
-} from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
-import { Route } from "react-router-dom";
-import{
-	Home,
-	About,
-	Login,
-	DashboardPage,
-	Aquarium,
-	UserTicketsManager,
-	CategoryManager,
-	ContactUs,
-	TicketsViewer
-
-}  from "./pages";
-
-import Signup from "./pages/Signup"
+} from '@ionic/react';
+import { IonReactRouter } from '@ionic/react-router';
+import { Redirect, Route } from 'react-router-dom';
+import { Home, About, Login, Aquarium, DashboardPage } from './pages';
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -66,18 +53,6 @@ const App: React.FC = () => {
 					</Route>
 					<Route path={"/about"}>
 						<About></About>
-					</Route>
-					<Route path={"/contact"}>
-						<ContactUs />
-					</Route>
-					<Route path={"/admin/tickets"}>
-						<TicketsViewer />
-					</Route>
-					<Route path="/admin/category/manager">
-						<CategoryManager />
-					</Route>
-					<Route path={"/signup"}>
-						<Signup></Signup>
 					</Route>
 				</IonRouterOutlet>
 			</IonReactRouter>
