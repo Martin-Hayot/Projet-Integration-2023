@@ -12,14 +12,14 @@ import {
 	About,
 	Login,
 	Aquarium,
+	//Signup,
 	DashboardPage,
 	ContactUs,
 	TicketsViewer,
 	CategoryManager,
 	UserTicketsManager,
 } from "./pages";
-
-import Signup from "./pages/Signup";
+import Signup from'./pages/Signup'
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
