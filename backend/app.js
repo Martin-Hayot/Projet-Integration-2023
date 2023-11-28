@@ -11,6 +11,7 @@ const authRoute = require("./routes/auth");
 const aquariumRoute = require("./routes/aquarium");
 const aquariumDiagnosticRoute = require("./routes/diagnostic");
 const aquariumDataRoute = require("./routes/data");
+const notification = require("./routes/Notification");
 
 
 mongoose
@@ -39,5 +40,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/aquarium", aquariumRoute);
 app.use("/api/aquarium/diagnostic", aquariumDiagnosticRoute);
 app.use("/api/aquarium/data", aquariumDataRoute);
+app.use('/api/notification',notification)
+app.use('/api/user', notification)
 
 module.exports = app;
