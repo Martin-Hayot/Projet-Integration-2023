@@ -173,4 +173,13 @@ router.get("/me", requireUser, async (req, res) => {
     });
 });
 
+router.delete("/logout", requireUser, async (req, res) => {
+    res.clearCookie("accessToken")
+        .clearCookie("refreshToken")
+        .status(200)
+        .json({
+            message: "Logged out successfully",
+        });
+});
+
 module.exports = router;
