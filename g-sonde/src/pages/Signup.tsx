@@ -137,10 +137,7 @@ const SignUp: React.FC = () => {
             <IonHeader>
                 <Navbar />
             </IonHeader>
-            <div
-                className="bg-cover bg-center bg-no-repeat h-full"
-                style={{ backgroundColor: "#F0F8FF", paddingTop: "20px" }}
-            >
+            <div className="bg-cover bg-center bg-no-repeat h-full flex justify-center items-center">
                 <div className="md:w-[35em] md:m-auto my-auto">
                     <h1 className="text-2xl text-center mb-6">
                         Créer un compte
