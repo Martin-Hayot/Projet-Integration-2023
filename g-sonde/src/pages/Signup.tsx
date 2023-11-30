@@ -19,7 +19,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Navbar } from "../components";
-import { Link } from "react-router-dom";
 
 const SignUp: React.FC = () => {
     const [firstname, setFirstname] = useState("");
