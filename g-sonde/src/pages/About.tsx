@@ -24,7 +24,7 @@ const About: React.FC = () => {
 						<h1 className='text-5xl mt-32 mb-6'>Desktop About</h1>
 						<p className='mb-12'>This is desktop-specific content.</p>
 						<IonButton routerLink='/user/home'>
-							Go to your aquarium page
+							Go to your aquarium page oui
 						</IonButton>
 					</section>
 				</div>
