@@ -1,22 +1,22 @@
 import {
-	IonApp,
-	IonRouterOutlet,
-	IonSplitPane,
-	setupIonicReact,
+    IonApp,
+    IonRouterOutlet,
+    IonSplitPane,
+    setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import {
-	Home,
-	About,
-	Login,
-	Aquarium,
-	DashboardPage,
-	ContactUs,
-	TicketsViewer,
-	CategoryManager,
-	UserTicketsManager,
+    Home,
+    About,
+    Login,
+    Aquarium,
+    DashboardPage,
+    ContactUs,
+    TicketsViewer,
+    CategoryManager,
+    UserTicketsManager,
 } from "./pages";
 import Signup from "./pages/Signup";
 /* Core CSS required for Ionic components to work properly */
@@ -43,44 +43,46 @@ import "../styles/tailwind.css";
 setupIonicReact();
 
 const App: React.FC = () => {
-	return (
-		<IonApp>
-			<IonReactRouter>
-				<IonRouterOutlet>
-					<Route exact path={"/"}>
-						<Home></Home>
-					</Route>
-					<Route path={"/user/dashboard"}>
-						<DashboardPage></DashboardPage>
-					</Route>
-					<Route path={"/user/tickets"}>
-						<UserTicketsManager></UserTicketsManager>
-					</Route>
-					<Route path={"/aquarium"}>
-						<Aquarium></Aquarium>
-					</Route>
-					<Route path={"/login"}>
-						<Login></Login>
-					</Route>
-					<Route path={"/about"}>
-						<About></About>
-					</Route>
-					<Route path={"/contact"}>
-						<ContactUs />
-					</Route>
-					<Route path={"/admin/tickets"}>
-						<TicketsViewer />
-					</Route>
-					<Route path="/admin/category/manager">
-						<CategoryManager />
-					</Route>
-					<Route path="/signup">
-						<Signup/>
-					</Route>
-				</IonRouterOutlet>
-			</IonReactRouter>
-		</IonApp>
-	);
+    return (
+        <IonApp>
+            <IonReactRouter>
+                <IonRouterOutlet>
+                    <Switch>
+                        <Route exact path={"/"}>
+                            <Home></Home>
+                        </Route>
+                        <Route path={"/user/dashboard"}>
+                            <DashboardPage></DashboardPage>
+                        </Route>
+                        <Route path={"/user/tickets"}>
+                            <UserTicketsManager></UserTicketsManager>
+                        </Route>
+                        <Route path={"/aquarium"}>
+                            <Aquarium></Aquarium>
+                        </Route>
+                        <Route path={"/login"}>
+                            <Login></Login>
+                        </Route>
+                        <Route path={"/about"}>
+                            <About></About>
+                        </Route>
+                        <Route path={"/contact"}>
+                            <ContactUs />
+                        </Route>
+                        <Route path={"/admin/tickets"}>
+                            <TicketsViewer />
+                        </Route>
+                        <Route path="/admin/category/manager">
+                            <CategoryManager />
+                        </Route>
+                        <Route path="/signup">
+                            <Signup />
+                        </Route>
+                    </Switch>
+                </IonRouterOutlet>
+            </IonReactRouter>
+        </IonApp>
+    );
 };
 
 export default App;
