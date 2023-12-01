@@ -1,6 +1,6 @@
 export { default as Home } from "./Home";
 export { default as About } from "./About";
-export { default as Aquarium } from "./Aquarium";
+export { default as Charts } from "./User/Charts";
 export { default as Login } from "./Login";
 export { default as DashboardPage } from "./User/DashboardPage";
 export { default as ContactUs } from "./ContactUs";

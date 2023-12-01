@@ -57,6 +57,11 @@ const Navbar: React.FC = () => {
 						</a>
 					)}
 					{emailUser && (
+						<a href="/user/Charts" className="hover:text-red-500">
+							Graphiques
+						</a>
+					)}
+					{emailUser && (
 						<a href="/user/tickets" className="hover:text-red-500">
 							Tickets
 						</a>
