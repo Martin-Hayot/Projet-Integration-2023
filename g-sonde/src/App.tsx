@@ -11,12 +11,12 @@ import {
     Home,
     About,
     Login,
-    Aquarium,
     DashboardPage,
     ContactUs,
     TicketsViewer,
     CategoryManager,
     UserTicketsManager,
+    Charts,
 } from "./pages";
 import Signup from "./pages/Signup";
 /* Core CSS required for Ionic components to work properly */
@@ -57,8 +57,8 @@ const App: React.FC = () => {
                         <Route path={"/user/tickets"}>
                             <UserTicketsManager></UserTicketsManager>
                         </Route>
-                        <Route path={"/aquarium"}>
-                            <Aquarium></Aquarium>
+                        <Route path={"/user/charts"}>
+                            <Charts></Charts>
                         </Route>
                         <Route path={"/login"}>
                             <Login></Login>
