@@ -21,7 +21,4 @@ const reportSchema = mongoose.Schema({
     }
 });
 
-// Index composite sur diagnostic et chemicalComponent
-diagnosticSchema.index({ diagnostic: 1, chemicalComponent: 1 }, { unique: true });
-
 module.exports = mongoose.model("Report", reportSchema);

@@ -21,63 +21,58 @@ import { UserContext } from '../../components';
 import { person } from 'ionicons/icons';
 import Navbar from '../../components/Navbar';
 
-const DashboardPage: React.FC = () => {
-	const { logout } = React.useContext(UserContext);
-	async function localLogout() {
-		logout();
-		window.location.href = '/';
-	}
-	const [data, setData] = React.useState();
-
-	async function getData() {
-		axios
-			.get('http://localhost:3001/api/user', {
-				withCredentials: true,
-			})
-			.then((res) => {
-				setData(res.data.message);
-			})
-			.catch((err) => {
-				window.location.href = '/login';
-			});
-	}
-
+const Dashboard: React.FC = () => {
+	const [userInfo, setUserInfo] = useState<any | null>(null);
+	const [aquariums, setAquariums] = useState<string[]>([]);
+  
+	const onLoad = async () => {
+	  const userId = localStorage.getItem('userId');
+	
+	  try {
+		// Information utilisateur
+		const userResponse = await axios.get(`http://localhost:3001/api/notification/user/${userId}`);
+		setUserInfo(userResponse.data);
+  
+		// Liste des aquariums
+		const aquariumResponse = await axios.get(`http://localhost:3001/api/notification/aquarium/${userId}`);
+		setAquariums(aquariumResponse.data);
+	  } catch (error) {
+		console.error("Error fetching data", error);
+	  }
+	};
+  
+	// Appelle onLoad lorsque le composant est monté
+	useEffect(() => {
+		onLoad();
+	}, []);
+  
 	return (
-		<>
-			<IonMenu contentId='main-content'>
-				<IonHeader>
-					<IonToolbar>
-						<IonTitle>Menu Content</IonTitle>
-					</IonToolbar>
-				</IonHeader>
-				<IonContent className='ion-padding'>
-					This is the menu content.
-					<div>
-						<Link to={'/contact'}>Contact</Link>
-					</div>
-					<IonButton expand='block' onClick={localLogout}>
-						Logout
-					</IonButton>
-				</IonContent>
-			</IonMenu>
-			<IonPage id='main-content'>
-				<IonHeader>
-					<IonToolbar>
-						<IonButtons slot='start'>
-							<IonMenuButton></IonMenuButton>
-						</IonButtons>
-						<IonTitle>Menu</IonTitle>
-					</IonToolbar>
-				</IonHeader>
-				<IonContent className='ion-padding'>
-					Tap the button in the toolbar to open the menu.
-					<br />
-					<IonButton onClick={getData}>Get Data</IonButton>
-					<div>{data}</div>
-				</IonContent>
-			</IonPage>
-		</>
+	  <IonPage>
+		<IonHeader>
+		  <IonToolbar>
+			<Navbar/>
+			{userInfo && (
+			  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px' }}>
+				<IonIcon icon={person} />
+				<br></br>
+				<IonLabel>Bonjour {userInfo.firstname} {userInfo.lastname}</IonLabel>
+			  </div>
+			)}
+		  </IonToolbar>
+		</IonHeader>
+		<IonContent>
+		  <div className="ml-7 mr-7">
+			<div>
+				<p className="mb-2">Liste des aquariums :</p>
+				<ul>
+					{aquariums.map((aquarium, index) => (
+					<li key={index}>{aquarium}</li>
+					))}
+				</ul>
+			</div>
+		  </div>
+		</IonContent>
+	  </IonPage>
 	);
-};
-
-export default DashboardPage;
+  };
+export default Dashboard  
