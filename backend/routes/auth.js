@@ -69,6 +69,7 @@ router.post('/login', async (req, res) => {
 			res.status(200).json({
 				message: 'Logged in successfully',
 				ability: searchedUser.ability || 0,
+				userId: searchedUser._id,
 			});
 		} else {
 			res.status(401).json({ message: 'Invalid credentials' });
