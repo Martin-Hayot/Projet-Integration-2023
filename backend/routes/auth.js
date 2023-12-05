@@ -45,41 +45,42 @@ router.post("/login", async (req, res) => {
             .status(400)
             .json({ message: "Email and password are required" });
 
-    try {
-        const searchedUser = await User.exists({ email: user.email }).select(
-            "password ability"
-        );
-        if (searchedUser == null) {
-            return res.status(401).json({ message: "User not found" });
-        }
-        if (await bcrypt.compare(user.password, searchedUser.password)) {
-            const accessToken = generateAccessToken({
-                userId: searchedUser._id,
-                email: user.email,
-            });
-            const refresh_token = generateRefreshToken({
-                userId: searchedUser._id,
-                email: user.email,
-            });
-            res.cookie("accessToken", accessToken, {
-                httpOnly: true,
-                maxAge: 3.154e10,
-            });
-            res.cookie("refreshToken", refresh_token, {
-                httpOnly: true,
-                maxAge: 3.154e10,
-            });
-            res.status(200).json({
-                message: "Logged in successfully",
-                ability: searchedUser.ability || 0,
-            });
-        } else {
-            res.status(401).json({ message: "Invalid credentials" });
-        }
-    } catch (e) {
-        console.log(e);
-        res.status(500).json(e);
-    }
+	try {
+		const searchedUser = await User.exists({ email: user.email }).select(
+			'password ability'
+		);
+		if (searchedUser == null) {
+			return res.status(401).json({ message: 'User not found' });
+		}
+		if (await bcrypt.compare(user.password, searchedUser.password)) {
+			const accessToken = generateAccessToken({
+				userId: searchedUser._id,
+				email: user.email,
+			});
+			const refresh_token = generateRefreshToken({
+				userId: searchedUser._id,
+				email: user.email,
+			});
+			res.cookie('accessToken', accessToken, {
+				httpOnly: true,
+				maxAge: 3.154e10,
+			});
+			res.cookie('refreshToken', refresh_token, {
+				httpOnly: true,
+				maxAge: 3.154e10,
+			});
+			res.status(200).json({
+				message: 'Logged in successfully',
+				ability: searchedUser.ability || 0,
+				userId: searchedUser._id,
+			});
+		} else {
+			res.status(401).json({ message: 'Invalid credentials' });
+		}
+	} catch (e) {
+		console.log(e);
+		res.status(500).json(e);
+	}
 });
 
 router.get("/google", async (req, res) => {

@@ -37,7 +37,9 @@ const Login: React.FC = () => {
                     withCredentials: true,
                 }
             );
-            if (res.status == 200) {
+            if (res.status == 200) {  
+                // Stock l'ID utilisateur dans le localStorage après la connexion réussie
+				localStorage.setItem("userId", res.data.userId);         
                 setEmailUser(email);
                 setShowSuccessToast(true);
                 const data = await res.data;
