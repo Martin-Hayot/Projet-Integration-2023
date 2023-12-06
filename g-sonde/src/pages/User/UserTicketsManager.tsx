@@ -13,10 +13,11 @@ const UserTicketsManager: React.FC = () => {
 	const [isAdminChecked, setIsAdminChecked] = useState<boolean>(false);
 
 	const { logout } = useContext(UserContext);
+	const apiUrl = import.meta.env.VITE_URL_API;
 
 	const fetchTickets = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3001/api/ticket/user/`, {
+			const res = await axios.get(`${apiUrl}ticket/user/`, {
 				withCredentials: true,
 				validateStatus: function () {
 					return true;

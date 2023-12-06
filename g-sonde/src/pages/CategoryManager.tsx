@@ -18,6 +18,8 @@ const CategoryManager: React.FC = () => {
 	const [showDeletionToast, setShowDeletionToast] = useState<boolean>(false);
 	const [isAdminChecked, setIsAdminChecked] = useState<boolean>(false);
 
+	const apiUrl = import.meta.env.VITE_URL_API;
+
 	const { logout } = useContext(UserContext);
 
 	const openPopup = () => {
@@ -49,7 +51,7 @@ const CategoryManager: React.FC = () => {
 			return;
 		}
 		const res = await axios.get(
-			`http://localhost:3001/api/category/search/${insertedLabelToFind.trim()}`,
+			`${apiUrl}category/search/${insertedLabelToFind.trim()}`,
 			{
 				withCredentials: true,
 				validateStatus: function () {
@@ -78,7 +80,7 @@ const CategoryManager: React.FC = () => {
 			return;
 		}
 		const res = await axios.post(
-			"http://localhost:3001/api/category",
+			`${apiUrl}category`,
 			{
 				label: insertedLabelToAdd.trim(),
 			},
@@ -97,7 +99,7 @@ const CategoryManager: React.FC = () => {
 
 	const fetchCategories = async () => {
 		try {
-			const response = await axios.get(`http://localhost:3001/api/category/`, {
+			const response = await axios.get(`${apiUrl}category/`, {
 				withCredentials: true,
 			});
 			setCategories(response.data.categories);
@@ -110,15 +112,12 @@ const CategoryManager: React.FC = () => {
 
 	const fetchUserAbility = async () => {
 		try {
-			const response = await axios.get(
-				`http://localhost:3001/api/user/ability`,
-				{
-					withCredentials: true,
-					validateStatus: function () {
-						return true;
-					},
-				}
-			);
+			const response = await axios.get(`${apiUrl}user/ability`, {
+				withCredentials: true,
+				validateStatus: function () {
+					return true;
+				},
+			});
 
 			if (
 				response.status === 401 ||

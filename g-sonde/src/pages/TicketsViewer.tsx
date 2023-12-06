@@ -17,11 +17,12 @@ const TicketsViewer: React.FC = () => {
 	const [isArchived, setIsArchived] = useState<boolean>(false);
 	const [isAdminChecked, setIsAdminChecked] = useState<boolean>(false);
 	const { logout } = useContext(UserContext);
+	const apiUrl = import.meta.env.VITE_URL_API;
 
 	const fetchTickets = async () => {
 		try {
 			const response = await axios.get(
-				`http://localhost:3001/api/ticket/${isArchived ? "archived" : ""}`,
+				`${apiUrl}ticket/${isArchived ? "archived" : ""}`,
 				{
 					withCredentials: true,
 					validateStatus: function () {

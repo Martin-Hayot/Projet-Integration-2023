@@ -15,15 +15,13 @@ import { UserContext } from "../components";
 
 const CategoryCard: React.FC<CategoryProps> = (params) => {
 	const { logout } = useContext(UserContext);
+	const apiUrl = import.meta.env.VITE_URL_API;
 
 	const deleteSelectedCategory = async () => {
 		try {
-			const res = await axios.delete(
-				`http://localhost:3001/api/category/${params._id}`,
-				{
-					withCredentials: true,
-				}
-			);
+			const res = await axios.delete(`${apiUrl}category/${params._id}`, {
+				withCredentials: true,
+			});
 			if (res.status == 200) {
 				params.onDelete(params._id);
 			}
