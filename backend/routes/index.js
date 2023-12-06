@@ -5,9 +5,9 @@ const ticketRoute = require("./ticket");
 const categoryRoute = require("./category");
 
 module.exports = {
-	userRoute,
-	authRoute,
-	aquariumRoute,
-	ticketRoute,
-	categoryRoute,
+    userRoute,
+    authRoute,
+    aquariumRoute,
+    ticketRoute,
+    categoryRoute,
 };
