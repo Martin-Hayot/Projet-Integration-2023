@@ -58,7 +58,7 @@ jobs:
           rm -rf tests/
           cd ..
           touch .env
-          echo "VITE_API_URL=https://g-sonde.online/api/" >> .env
+          echo "VITE_URL_API=https://g-sonde.online/api/" >> .env
           sudo npm i
           npm run build
           sudo rm -rf node_modules/
