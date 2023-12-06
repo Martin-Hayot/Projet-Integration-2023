@@ -26,6 +26,7 @@ const ContactUs: React.FC = () => {
 	const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
 	const { emailUser } = React.useContext(UserContext);
+	const apiUrl = import.meta.env.VITE_URL_API;
 
 	const openPopup = () => {
 		setIsPopupOpen(true);
@@ -37,7 +38,7 @@ const ContactUs: React.FC = () => {
 
 	const fetchCategories = async () => {
 		try {
-			const response = await axios.get(`http://localhost:3001/api/category/`, {
+			const response = await axios.get(`${apiUrl}category/`, {
 				withCredentials: true,
 				validateStatus: function () {
 					return true;
@@ -61,7 +62,7 @@ const ContactUs: React.FC = () => {
 			}
 		}
 		const res = await axios.post(
-			"http://localhost:3001/api/ticket",
+			`${apiUrl}ticket`,
 			{
 				message: insertedMessage,
 				...(categoryChosen ? { categoryId: categoryChosen._id } : null),
