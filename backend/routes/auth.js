@@ -6,6 +6,7 @@ const {
     generateRefreshToken,
 } = require("../utils/jwt.utils");
 const User = require("../models/user");
+const Sonde = require("../models/sonde/sonde");
 const { requireUser } = require("../middleware/auth");
 
 router.post("/signup", async (req, res) => {
@@ -180,6 +181,24 @@ router.delete("/logout", requireUser, async (req, res) => {
         .json({
             message: "Logged out successfully",
         });
+});
+
+router.post("/link", async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password)
+        return res.status(400).json({ message: "All entries are required" });
+    searchedUser = User.exists({ email: email }).select("password");
+    if (searchedUser == null) {
+        return res.status(401).json({ message: "User not found" });
+    }
+    if (await bcrypt.compare(password, searchedUser.password)) {
+        return res.status(401).json({ message: "Invalid credentials" });
+    }
+    const sonde = new Sonde({
+        userId: searchedUser._id,
+    });
+    await Sonde.create(sonde);
+    res.status(200).json({ token: sonde._id });
 });
 
 module.exports = router;

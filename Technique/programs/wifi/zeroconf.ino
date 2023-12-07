@@ -13,6 +13,7 @@ struct FormData
     char profilePassword[64]; // Adjust the array sizes according to your needs
 };
 FormData user = {"", "", "", ""};
+String token = "";
 int serverPort = 3001;
 bool gotData = false;
 int status = WL_IDLE_STATUS;
@@ -262,7 +263,27 @@ void sendRequestToServer(FormData formData)
             if (client.available())
             {
                 char c = client.read();
+
+                // Print response to serial monitor
                 Serial.write(c);
+
+                // Check the response body for token
+                if (c == '{')
+                {
+                    String response = "";
+                    while (client.available())
+                    {
+                        response += (char)client.read();
+                    }
+                    Serial.println(response);
+                    int tokenIndex = response.indexOf("token");
+                    if (tokenIndex != -1)
+                    {
+                        sscanf(response.c_str() + tokenIndex, "token\":\"%[^\"]", token);
+                        Serial.println(user.profilePassword);
+                        break;
+                    }
+                }
             }
         }
 
