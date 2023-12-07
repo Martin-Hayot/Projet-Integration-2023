@@ -30,10 +30,10 @@ app.use(bodyParser.urlencoded({ limit: "1mb", extended: true }));
 app.use(deserializeUser);
 app.use(rateLimiter);
 app.use(
-	cors({
-		origin: process.env.FRONTEND_URL,
-		credentials: true,
-	})
+    cors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true,
+    })
 );
 
 app.use("/api/user", userRoute);
