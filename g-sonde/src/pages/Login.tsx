@@ -8,6 +8,7 @@ import {
     IonLabel,
     IonPage,
     IonToast,
+    IonHeader,
 } from "@ionic/react";
 import { Browser } from "@capacitor/browser";
 import React, { useEffect, useState } from "react";
@@ -15,6 +16,7 @@ import { logInOutline, personCircleOutline } from "ionicons/icons";
 import axios from "axios";
 import { UserContext } from "../components";
 import { Link } from "react-router-dom";
+import { Navbar } from "../components";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -23,12 +25,13 @@ const Login: React.FC = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
     const { setEmailUser, setAbilityUser } = React.useContext(UserContext);
+    const apiUrl = import.meta.env.VITE_URL_API;
 
     async function logIn(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
             const res = await axios.post(
-                "http://localhost:3001/api/auth/login",
+                `${apiUrl}auth/login`,
                 {
                     email: email,
                     password: password,
@@ -59,7 +62,8 @@ const Login: React.FC = () => {
     }
 
     async function getGoogleOAuthUrl() {
-        const res = await axios.get("http://localhost:3001/api/auth/google");
+        console.log(`${apiUrl}auth/google`);
+        const res = await axios.get(`${apiUrl}auth/google`);
         return res.data.url as string;
     }
 
@@ -85,6 +89,9 @@ const Login: React.FC = () => {
     }, []);
     return (
         <IonPage>
+            <IonHeader>
+                <Navbar />
+            </IonHeader>
             <div className="md:w-[35em] md:m-auto my-auto">
                 <h1 className="text-2xl text-center mb-6">
                     Login or Create a new account

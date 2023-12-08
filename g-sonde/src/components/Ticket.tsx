@@ -14,19 +14,17 @@ import { CategoryProps, TicketProps } from "../types";
 
 const Ticket: React.FC<TicketProps> = (params) => {
 	const [category, setCategory] = useState<CategoryProps>();
+	const apiUrl = import.meta.env.VITE_URL_API;
 
 	const deleteSelectedTicket = async () => {
 		if (!params.readonly && params.onDelete) {
 			try {
-				const res = await axios.delete(
-					`http://localhost:3001/api/ticket/${params._id}`,
-					{
-						withCredentials: true,
-						validateStatus: function () {
-							return true;
-						},
-					}
-				);
+				const res = await axios.delete(`${apiUrl}ticket/${params._id}`, {
+					withCredentials: true,
+					validateStatus: function () {
+						return true;
+					},
+				});
 				if (res.status == 200) {
 					params.onDelete(params._id);
 				}
@@ -46,7 +44,7 @@ const Ticket: React.FC<TicketProps> = (params) => {
 		if (!params.readonly && params.onArchive) {
 			try {
 				const res = await axios.post(
-					`http://localhost:3001/api/ticket/archive/${params._id}`,
+					`${apiUrl}ticket/archive/${params._id}`,
 					{},
 					{
 						withCredentials: true,
@@ -96,12 +94,9 @@ const Ticket: React.FC<TicketProps> = (params) => {
 
 	const fetchUser = async () => {
 		try {
-			const res = await axios.get(
-				`http://localhost:3001/api/user/${params.userId}`,
-				{
-					withCredentials: true,
-				}
-			);
+			const res = await axios.get(`${apiUrl}user/${params.userId}`, {
+				withCredentials: true,
+			});
 			if (res.status == 200) {
 				return res.data.user;
 			}
@@ -113,7 +108,7 @@ const Ticket: React.FC<TicketProps> = (params) => {
 	const fetchCategory = async () => {
 		try {
 			const response = await axios.get(
-				`http://localhost:3001/api/category/${params.categoryId}`,
+				`${apiUrl}category/${params.categoryId}`,
 				{
 					withCredentials: true,
 					validateStatus: function () {

@@ -14,14 +14,24 @@ import {
 	IonLabel,
 	IonIcon,
 } from '@ionic/react';
-import { Link } from 'react-router-dom';
+import { Link,useHistory} from 'react-router-dom';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { UserContext } from '../../components';
+import requireAuth from "../../utils/requireAuth";
 import { person } from 'ionicons/icons';
 import Navbar from '../../components/Navbar';
 
-const Dashboard: React.FC = () => {
+const DashboardPage: React.FC = () => {
+	const { logout } = React.useContext(UserContext);
+    async function localLogout() {
+        logout();
+        window.location.href = "/";
+    }
+    const [data, setData] = React.useState();
+
+    const history = useHistory();
+    const apiUrl = import.meta.env.VITE_URL_API;
 	const [userInfo, setUserInfo] = useState<any | null>(null);
 	const [aquariums, setAquariums] = useState<string[]>([]);
 	//const [toastMessage, setToastMessage] = useState<string>("");
@@ -34,6 +44,7 @@ const Dashboard: React.FC = () => {
 		// Information utilisateur
 		const userResponse = await axios.get(`http://localhost:3001/api/notification/user/${userId}`);
 		setUserInfo(userResponse.data);
+		console.log('data: ', userResponse.data)
   
 		// Liste des aquariums
 		const aquariumResponse = await axios.get(`http://localhost:3001/api/notification/aquarium/${userId}`);
@@ -45,8 +56,22 @@ const Dashboard: React.FC = () => {
   
 	// Appel onLoad lorsque le composant est monté
 	useEffect(() => {
+		requireAuth(history);
 		onLoad();
 	}, []);
+
+	async function getData() {
+        axios
+            .get(`${apiUrl}user`, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                setData(res.data.message);
+            })
+            .catch((err) => {
+                window.location.href = "/login";
+            });
+    }
 
 	const handleAquariumClick = async (aquariumName: string) => {
 		try {
@@ -132,4 +157,4 @@ const Dashboard: React.FC = () => {
 	  </IonPage>
 	);
   };
-export default Dashboard  
+export default DashboardPage  

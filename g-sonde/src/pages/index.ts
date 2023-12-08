@@ -7,3 +7,4 @@ export { default as ContactUs } from "./ContactUs";
 export { default as TicketsViewer } from "./TicketsViewer";
 export { default as CategoryManager } from "./CategoryManager";
 export { default as UserTicketsManager } from "./User/UserTicketsManager";
+export { default as Profile } from "./User/Profile";
