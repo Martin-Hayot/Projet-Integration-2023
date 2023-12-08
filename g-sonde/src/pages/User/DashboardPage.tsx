@@ -34,7 +34,6 @@ const DashboardPage: React.FC = () => {
     const apiUrl = import.meta.env.VITE_URL_API;
 	const [userInfo, setUserInfo] = useState<any | null>(null);
 	const [aquariums, setAquariums] = useState<string[]>([]);
-	//const [toastMessage, setToastMessage] = useState<string>("");
 	const [buttonState, setButtonState] = useState<string>("");
 	const [toastMessage, setToastMessage] = useState<React.ReactNode | null>(null);
 	const onLoad = async () => {
@@ -104,7 +103,6 @@ const DashboardPage: React.FC = () => {
 			setToastMessage(
 			  <div className='text-red'>
 				{notificationMessages.map((message:string, index:string) => (
-				  //<p key={index}>{message}</p>
 				  <p key={index}  dangerouslySetInnerHTML={{ __html: message }} />
 				))}
 			  </div>

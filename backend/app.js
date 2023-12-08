@@ -16,7 +16,7 @@ const {
 } = require("./routes");
 const chemicalComponent = require('./routes/chemicalComponent');
 const notifications = require('./routes/notification');
-const diagnostic = require('./routes/diagnostic')
+//const diagnostic = require('./routes/diagnostic')
 mongoose
     .connect(process.env.DATABASE_ACCESS)
     .then(() => {
@@ -44,9 +44,7 @@ app.use("/api/ticket", ticketRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/aquarium", aquariumRoute);
 app.use("/api/chemicalComponent", chemicalComponent);
-app.use("/api/diagnostic", diagnostic);
+//app.use("/api/diagnostic", diagnostic);
 app.use("/api/notification",notifications);
-
-
 
 module.exports = app;
