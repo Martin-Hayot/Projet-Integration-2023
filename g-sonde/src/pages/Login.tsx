@@ -28,8 +28,8 @@ const Login: React.FC = () => {
     const [showSuccessToast, setShowSuccessToast] = useState(false);
     const { setEmailUser, setAbilityUser } = React.useContext(UserContext);
     const apiUrl = import.meta.env.VITE_URL_API;
+    //const { requireUser } = require("../middleware/auth");
     
-
     async function logIn(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {

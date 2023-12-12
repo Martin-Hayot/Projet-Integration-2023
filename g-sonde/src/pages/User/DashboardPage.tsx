@@ -13,6 +13,7 @@ import {
 	isPlatform,
 	IonLabel,
 	IonIcon,
+	IonModal
 } from '@ionic/react';
 import { Link,useHistory} from 'react-router-dom';
 import axios from 'axios';
@@ -21,6 +22,7 @@ import { UserContext } from '../../components';
 import requireAuth from "../../utils/requireAuth";
 import { person } from 'ionicons/icons';
 import Navbar from '../../components/Navbar';
+import Cookies from 'js-cookie';
 
 const DashboardPage: React.FC = () => {
 	const { logout } = React.useContext(UserContext);
@@ -29,24 +31,27 @@ const DashboardPage: React.FC = () => {
         window.location.href = "/";
     }
     const [data, setData] = React.useState();
-
+	const [showModal, setShowModal] = useState(false);
     const history = useHistory();
     const apiUrl = import.meta.env.VITE_URL_API;
 	const [userInfo, setUserInfo] = useState<any | null>(null);
 	const [aquariums, setAquariums] = useState<string[]>([]);
 	const [buttonState, setButtonState] = useState<string>("");
 	const [toastMessage, setToastMessage] = useState<React.ReactNode | null>(null);
+	const [detailedComponent, setDetailedComponent] = useState<string | null>(null);
+	const [selectedAquariumNotifications, setSelectedAquariumNotifications] = useState<any[]>([]);
 	const onLoad = async () => {
-	const userId = localStorage.getItem('userId');
+	const userId = Cookies.get('userId');
+
+	//const userId = requireUser.id
 	
 	  try {
 		// Information utilisateur
-		const userResponse = await axios.get(`http://localhost:3001/api/notification/user/${userId}`);
+		const userResponse = await axios.get(`${apiUrl}notification/user/${userId}`);
 		setUserInfo(userResponse.data);
-		console.log('data: ', userResponse.data)
-  
+		  
 		// Liste des aquariums
-		const aquariumResponse = await axios.get(`http://localhost:3001/api/notification/aquarium/${userId}`);
+		const aquariumResponse = await axios.get(`${apiUrl}notification/aquarium/${userId}`);
 		setAquariums(aquariumResponse.data);
 	  } catch (error) {
 		console.error("Error fetching data", error);
@@ -75,10 +80,15 @@ const DashboardPage: React.FC = () => {
 	const handleAquariumClick = async (aquariumName: string) => {
 		try {
 		  const userId = localStorage.getItem('userId');
-	  
-		  const notificationResponse = await axios.get(`http://localhost:3001/api/notification/notifications/${userId}`);
+		  const notificationResponse = await axios.get(`${apiUrl}notification/notifications/${userId}`);
 		  const notifications = notificationResponse.data.notifications;
-	  
+		  
+		  const selectedAquariumNotifications = notifications.filter(
+			(notification: { aquarium: string; component: string; message: string; style?: string }) => notification.aquarium === aquariumName
+		  );
+	
+		  setSelectedAquariumNotifications(selectedAquariumNotifications);
+	
 		  const aquariumNotifications = notifications.filter(
 			(notification: { aquarium: string; component: string; message: string; style?: string }) => notification.aquarium === aquariumName
 		  );
@@ -95,24 +105,23 @@ const DashboardPage: React.FC = () => {
 			  </div>
 			);
 		  } else {
-			const notificationMessages = aquariumNotifications.map(
-			  (notif: { aquarium: string; component: string; message: string; style?: string }) => (
-				`${notif.message}`
-			  )
-			);
-			setToastMessage(
-			  <div className='text-red'>
-				{notificationMessages.map((message:string, index:string) => (
-				  <p key={index}  dangerouslySetInnerHTML={{ __html: message }} />
-				))}
-			  </div>
-			);
+			const faultyComponents = aquariumNotifications.map(
+				(notif: { aquarium: string; component: string; message: string; style?: string }) => notif.component
+			  );
+			  setToastMessage(
+				<div className='text-red'>
+				  {`Composant défaillant dans ${aquariumName}: ${faultyComponents.join(', ')}`}
+				  <IonButton onClick={() => setShowModal(true)}>Voir détails</IonButton>
+				</div>
+			  );
 		  }
 		} catch (error) {
 		  console.error("Error fetching notifications", error);
 		}
 	  };
-	  
+	const handleCloseModal = () => {
+    setShowModal(false);
+  }; 
 
 	return (
 	  <IonPage>
@@ -151,6 +160,25 @@ const DashboardPage: React.FC = () => {
 			</div>
 		  </div>
 		  {toastMessage && <div className="toast ml-5">{toastMessage}</div>}
+      {/* Ajout du composant Modal pour afficher les détails */}
+      <IonModal isOpen={showModal} onDidDismiss={handleCloseModal}>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Informations détaillées</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-text-center">
+			{selectedAquariumNotifications.map(
+				(notif: { aquarium: string; component: string; message: string; style?: string }, index: number) => (
+            <div key={index} >
+              <p className="ion-justify-content-center" dangerouslySetInnerHTML={{ __html: notif.message }} />
+            </div>
+          ))}
+    	</IonContent>
+        <IonFooter>
+          <IonButton onClick={handleCloseModal}>Fermer</IonButton>
+        </IonFooter>
+      </IonModal>
 		</IonContent>
 	  </IonPage>
 	);
