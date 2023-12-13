@@ -2,6 +2,7 @@ const app = require("./app");
 const port = 3001;
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const fs = require("fs");
 
 const swaggerOptions = {
     definition: {
@@ -16,6 +17,14 @@ const swaggerOptions = {
 };
 
 const swaggerSpec = swaggerJsDoc(swaggerOptions);
+
+fs.writeFile("./swagger.json", JSON.stringify(swaggerSpec), (err) => {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("Swagger JSON created");
+    }
+});
 
 function swaggerDocs(app, port) {
     app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
