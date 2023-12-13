@@ -4,6 +4,49 @@ const User = require("../models/user");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 
+/**
+ * @openapi
+ * /user/profile:
+ *   get:
+ *     tags:
+ *     - user
+ *     summary: Fetches the profile of the authenticated user
+ *     security:
+ *     - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Returns the user's profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 firstname:
+ *                   type: string
+ *                 lastname:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found!"
+ *       '500':
+ *         description: Something went wrong
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.get("/profile", requireUser, async (req, res) => {
     try {
         const searchedUser = await User.findOne({
@@ -22,6 +65,45 @@ router.get("/profile", requireUser, async (req, res) => {
     }
 });
 
+/**
+ * @openapi
+ * /user/profile/picture:
+ *   get:
+ *     tags:
+ *     - user
+ *     summary: Fetches the profile picture of the authenticated user
+ *     security:
+ *     - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Returns the user's profile picture
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 profilePicture:
+ *                   type: string
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found!"
+ *       '500':
+ *         description: Something went wrong
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.get("/profile/picture", requireUser, async (req, res) => {
     const { userId } = req.user;
     const getProfilePicture = await User.findById(userId).select(
@@ -30,6 +112,75 @@ router.get("/profile/picture", requireUser, async (req, res) => {
     res.status(200).json({ profilePicture: getProfilePicture.profilePicture });
 });
 
+/**
+ * @openapi
+ * /user/profile:
+ *   patch:
+ *     tags:
+ *     - user
+ *     summary: Updates the profile of the authenticated user
+ *     security:
+ *     - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstname
+ *               - lastname
+ *               - email
+ *               - password
+ *             properties:
+ *               firstname:
+ *                 type: string
+ *               lastname:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User updated successfully!"
+ *       '400':
+ *         description: All entries are required or new password cannot be the same as old password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found!"
+ *       '500':
+ *         description: Something went wrong
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.patch("/profile", requireUser, async (req, res) => {
     const { userId } = req.user;
     const { firstname, lastname, email, password } = req.body;
@@ -67,6 +218,75 @@ router.patch("/profile", requireUser, async (req, res) => {
     }
 });
 
+/**
+ * @openapi
+ * /user/profile:
+ *   patch:
+ *     tags:
+ *     - user
+ *     summary: Updates the profile of the authenticated user
+ *     security:
+ *     - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstname
+ *               - lastname
+ *               - email
+ *               - password
+ *             properties:
+ *               firstname:
+ *                 type: string
+ *               lastname:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User updated successfully!"
+ *       '400':
+ *         description: All entries are required or new password cannot be the same as old password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found!"
+ *       '500':
+ *         description: Something went wrong
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.put("/profile/picture", requireUser, async (req, res) => {
     const { userId } = req.user;
     const { profilePicture } = req.body;

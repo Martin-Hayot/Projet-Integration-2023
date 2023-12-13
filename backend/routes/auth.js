@@ -8,6 +8,76 @@ const {
 const User = require("../models/user");
 const { requireUser } = require("../middleware/auth");
 
+/**
+ * @openapi
+ * /api/auth/signup:
+ *   post:
+ *     tags:
+ *      - auth
+ *     summary: Create a new user
+ *     parameters:
+ *      - in: query
+ *        name: firstname
+ *        schema:
+ *          type: string
+ *          default: john
+ *      - in: query
+ *        name: lastname
+ *        schema:
+ *          type: string
+ *          default: doe
+ *      - in: query
+ *        name: email
+ *        schema:
+ *          type: string
+ *          default: johndoe@example.com
+ *      - in: query
+ *        name: password
+ *        schema:
+ *          type: string
+ *          default: password
+ *      - in: query
+ *        name: ability
+ *        schema:
+ *          type: number
+ *          default: 0
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstname:
+ *                 type: string
+ *                 default: john
+ *               lastname:
+ *                 type: string
+ *                 default: doe
+ *               email:
+ *                 type: string
+ *                 default: johndoe@example.com
+ *               password:
+ *                 type: string
+ *                 default: password
+ *               ability:
+ *                 type: number
+ *                 default: 0
+ *             required:
+ *               - email
+ *               - password
+ *               - firstname
+ *               - lastname
+ *     responses:
+ *       '201':
+ *         description: User created successfully
+ *       '400':
+ *         description: All entries are required
+ *       '409':
+ *         description: User already exists
+ *       '500':
+ *         description: Internal server error
+ */
 router.post("/signup", async (req, res) => {
     let user = new User({
         firstname: req.body.firstname,
@@ -34,6 +104,55 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+/**
+ * @openapi
+ * /api/auth/login:
+ *   post:
+ *     tags:
+ *     - auth
+ *     summary: Login a user
+ *     parameters:
+ *     - in: body
+ *       name: user
+ *       description: The user to create.
+ *       schema:
+ *         type: object
+ *         required:
+ *           - email
+ *           - password
+ *         properties:
+ *           email:
+ *             type: string
+ *             default: johndoe@example.com
+ *           password:
+ *             type: string
+ *             default: password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 default: johndoe@example.com
+ *               password:
+ *                 type: string
+ *                 default: password
+ *     responses:
+ *       '200':
+ *         description: Logged in successfully
+ *       '400':
+ *         description: Email and password are required
+ *       '401':
+ *         description: Invalid credentials
+ *       '500':
+ *         description: Internal server error
+ */
 router.post("/login", async (req, res) => {
     let user = new User({
         email: req.body.email,
@@ -82,6 +201,25 @@ router.post("/login", async (req, res) => {
     }
 });
 
+/**
+ * @openapi
+ * /api/auth/google:
+ *   get:
+ *     tags:
+ *     - auth
+ *     summary: Redirects to Google's OAuth 2.0 endpoint
+ *     responses:
+ *       '200':
+ *         description: Returns the Google OAuth 2.0 endpoint URL
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ *                   description: The Google OAuth 2.0 endpoint URL
+ */
 router.get("/google", async (req, res) => {
     const google_id = process.env.GOOGLE_CLIENT_ID;
     const redirect_uri = process.env.GOOGLE_OAUTH_REDIRECT_URL;
@@ -104,6 +242,28 @@ router.get("/google", async (req, res) => {
     });
 });
 
+/**
+ * @openapi
+ * /api/auth/google/callback:
+ *   get:
+ *     tags:
+ *     - auth
+ *     summary: Handles the callback from Google's OAuth 2.0 endpoint
+ *     parameters:
+ *     - in: query
+ *       name: code
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: The authorization code returned from Google's OAuth 2.0 endpoint
+ *     responses:
+ *       '200':
+ *         description: User logged in successfully and redirected to home page
+ *       '403':
+ *         description: Failed to get Google user or email not verified, redirected to login page
+ *       '409':
+ *         description: User already exists, redirected to login page
+ */
 router.get("/google/callback", async (req, res) => {
     const code = req.query.code;
     try {
@@ -160,6 +320,43 @@ router.get("/google/callback", async (req, res) => {
     }
 });
 
+/**
+ * @openapi
+ * /api/auth/me:
+ *   get:
+ *     tags:
+ *     - auth
+ *     summary: Returns the authenticated user's information
+ *     security:
+ *     - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: User is authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Authenticated"
+ *                 authenticated:
+ *                   type: boolean
+ *                   example: true
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ *                 authenticated:
+ *                   type: boolean
+ *                   example: false
+ */
 router.get("/me", requireUser, async (req, res) => {
     const searchedUser = await User.findById(req.user.userId);
     if (searchedUser == null) {
@@ -173,6 +370,21 @@ router.get("/me", requireUser, async (req, res) => {
     });
 });
 
+/**
+ * @openapi
+ * /api/auth/logout:
+ *   delete:
+ *     tags:
+ *     - auth
+ *     summary: Logout a user
+ *     security:
+ *     - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Logged out successfully
+ *       '401':
+ *         description: Unauthorized
+ */
 router.delete("/logout", requireUser, async (req, res) => {
     res.clearCookie("accessToken")
         .clearCookie("refreshToken")
