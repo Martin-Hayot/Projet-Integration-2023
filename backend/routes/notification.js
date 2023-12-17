@@ -8,8 +8,9 @@ const Diagnostic = require('../models/sonde/diagnostic');
 const Report = require('../models/sonde/report')
 const ChemicalComponent = require('../models/sonde/chemicalComponent');
 
+RESEND_API_KEY="re_DCPrQNGS_NUrgzbaiQmNMdYkw6fHCS3g8"
 // Créez une instance de la classe Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(RESEND_API_KEY);
 
 // Fonction pour envoyer un e-mail
 const sendMail = async (mailOptions) => {
