@@ -34,6 +34,7 @@ jobs:
     # - On build le frontend
     # - Une fois le projet build, on supprime le node_modules car ce fichier a été créé avec les droit root, ça veut dire que github actions ne peut pas les supprimer quand il fera son checkout
     # nginx est notre web server
+    # - On copie les fichiers builder dans un autre repertoir pour rendre le site toujours disponible même si le build crash
     # - On redémarre le serveur nginx pour qu'il utilise les nouveau fichier du front que l'on vient de build
 
     steps:
@@ -62,5 +63,7 @@ jobs:
           sudo npm i
           npm run build
           sudo rm -rf node_modules/
+          rm -rf ../../../../../html/*
+          cp -r dist/* ../../../../../html/
           sudo service nginx restart
       
