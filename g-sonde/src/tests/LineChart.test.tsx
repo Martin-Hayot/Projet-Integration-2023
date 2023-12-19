@@ -1,14 +1,14 @@
 import { render } from "@testing-library/react";
-import LineChart from '../components/LineChart';
+import LineChart from "../components/LineChart";
 
 const chartData = {
     labels: [1, 2],
     datasets: [
         {
-            label: 'Resistance / Frequency',
+            label: "Resistance / Frequency",
             data: [2, 1],
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: "rgb(255, 99, 132)",
+            backgroundColor: "rgba(255, 99, 132, 0.5)",
         },
     ],
 };
