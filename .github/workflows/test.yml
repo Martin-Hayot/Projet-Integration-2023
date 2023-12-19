@@ -43,3 +43,8 @@ jobs:
                   cd g-sonde
                   npm ci
                   npm run build
+            - name: Run tests
+              run: |
+                  cd g-sonde
+                  npm ci
+                  npm run test.unit
