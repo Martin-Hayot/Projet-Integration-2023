@@ -22,7 +22,6 @@ import { UserContext } from '../../components';
 import requireAuth from "../../utils/requireAuth";
 import { person } from 'ionicons/icons';
 import Navbar from '../../components/Navbar';
-import Cookies from 'js-cookie';
 
 const DashboardPage: React.FC = () => {
 	const { logout } = React.useContext(UserContext);
@@ -41,10 +40,8 @@ const DashboardPage: React.FC = () => {
 	const [detailedComponent, setDetailedComponent] = useState<string | null>(null);
 	const [selectedAquariumNotifications, setSelectedAquariumNotifications] = useState<any[]>([]);
 	const onLoad = async () => {
-	const userId = Cookies.get('userId');
+	const userId = new URLSearchParams(window.location.search).get("userId");
 
-	//const userId = requireUser.id
-	
 	  try {
 		// Information utilisateur
 		const userResponse = await axios.get(`${apiUrl}notification/user/${userId}`);

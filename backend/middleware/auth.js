@@ -93,11 +93,11 @@ async function deserializeUser(req, res, next) {
 				if (err) {
 					return next();
 				}
-				console.log("attempt to reuse a refresh token");
+				//console.log("attempt to reuse a refresh token");
 				const hackedUser = await User.findById(decoded.userId);
 				hackedUser.refreshToken = [];
 				const result = await hackedUser.save();
-				console.log(result);
+				//console.log(result);
 				return next();
 			}
 		);
