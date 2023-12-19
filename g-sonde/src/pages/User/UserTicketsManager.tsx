@@ -1,12 +1,14 @@
-import { IonPage, IonToast } from "@ionic/react";
+import { IonPage, IonToast, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonIcon, IonLabel, IonContent } from "@ionic/react";
+import { person } from 'ionicons/icons';
 import { Navbar, Ticket, UserContext } from "../../components";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { TicketProps } from "../../types";
+import Menu from "../../components/Menu";
 
 const UserTicketsManager: React.FC = () => {
 	const [tickets, setTickets] = useState<TicketProps[]>([]);
-
+	const [userInfo, setUserInfo] = useState<any | null>(null);
 	const [errorMessageToast, setErrorMessageToast] = useState<string>("");
 
 	const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
@@ -40,15 +42,42 @@ const UserTicketsManager: React.FC = () => {
 		}
 	};
 
+
 	useEffect(() => {
 		fetchTickets();
+		axios.get(apiUrl + 'user/profile',{
+			withCredentials: true,
+		})
+			.then((response) => {
+				if (response.status === 401 || response.status === 400) {
+					window.location.href = "/login?error=unauthorized";
+					return;
+				}
+				setUserInfo(response.data);
+			})
 	}, []);
 
 	return (
 		isAdminChecked && (
-			<IonPage>
-				<Navbar />
-
+			<>
+			<Menu/>
+			<IonPage id="main-content">
+			<IonHeader>
+					<IonToolbar>
+						<IonButtons slot='start'>
+							<IonMenuButton></IonMenuButton>
+						</IonButtons>
+						<IonTitle></IonTitle>
+						<div style= {{paddingTop: "25px", fontSize:"20px"}}>Menu</div>
+							{userInfo && (
+            					<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px' }}>
+              						<IonIcon icon={person} />
+              						<IonLabel>Bonjour {userInfo.firstname} {userInfo.lastname}</IonLabel>
+            					</div>
+          					)}
+					</IonToolbar>
+				</IonHeader>
+				<IonContent className="ion-text-center ion-padding">
 				<div className="m-1 mx-auto">
 					<h1 className="text-4xl underline">"Your Tickets :"</h1>
 				</div>
@@ -69,6 +98,7 @@ const UserTicketsManager: React.FC = () => {
 						<p>You have no opened tickets</p>
 					)}
 				</div>
+				</IonContent>
 				<IonToast
 					id="toast-user-tickets-manager-error"
 					isOpen={showErrorToast}
@@ -84,6 +114,7 @@ const UserTicketsManager: React.FC = () => {
 					]}
 				/>
 			</IonPage>
+			</>
 		)
 	);
 };
