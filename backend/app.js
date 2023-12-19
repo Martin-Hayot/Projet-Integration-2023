@@ -14,6 +14,8 @@ const {
     ticketRoute,
     categoryRoute,
 } = require("./routes");
+const chemicalComponent = require('./routes/chemicalComponent');
+const notifications = require('./routes/notification');
 
 mongoose
     .connect(process.env.DATABASE_ACCESS)
@@ -41,5 +43,8 @@ app.use("/api/auth", authRoute);
 app.use("/api/ticket", ticketRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/aquarium", aquariumRoute);
+app.use("/api/chemicalComponent", chemicalComponent);
+//app.use("/api/report", report);
+app.use("/api/notification",notifications);
 
 module.exports = app;

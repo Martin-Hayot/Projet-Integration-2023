@@ -26,7 +26,7 @@ const Login: React.FC = () => {
     const [showSuccessToast, setShowSuccessToast] = useState(false);
     const { setEmailUser, setAbilityUser } = React.useContext(UserContext);
     const apiUrl = import.meta.env.VITE_URL_API;
-
+    
     async function logIn(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
@@ -40,14 +40,16 @@ const Login: React.FC = () => {
                     withCredentials: true,
                 }
             );
-            if (res.status == 200) {
+            if (res.status == 200) {  
+                // Stock l'ID utilisateur dans le localStorage après la connexion réussie
+				//Cookies.set("userId", res.data.userId, { expires: 7 });        
                 setEmailUser(email);
                 setShowSuccessToast(true);
                 const data = await res.data;
                 setToastMessage(data.message);
                 setAbilityUser(data.ability);
                 sleep(1000).then(() => {
-                    window.location.href = "/user/dashboard";
+                    window.location.href = `/user/dashboard?userId=${data.userId}`;
                 });
             } else {
                 setShowErrorToast(true);
