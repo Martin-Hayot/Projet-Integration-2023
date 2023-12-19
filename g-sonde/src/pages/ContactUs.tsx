@@ -7,17 +7,26 @@ import {
 	IonToast,
 	IonSelect,
 	IonSelectOption,
+	IonHeader,
+	IonButtons,
+	IonMenuButton,
+	IonToolbar,
+	IonIcon,
+	IonLabel,
+	IonTitle
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { Navbar, UserContext, Popup } from "../components";
 import axios from "axios";
 import { CategoryProps } from "../types";
+import Menu from "../components/Menu";
+import { person } from 'ionicons/icons';
 
 const ContactUs: React.FC = () => {
 	const [insertedMessage, setInsertedMessage] = useState<string>("");
 	const [ticketId, setTicketId] = useState<string>("");
 	const [toastMessage, setToastMessage] = useState<string>("");
-
+	const [userInfo, setUserInfo] = useState<any | null>(null);
 	const [categoryChosen, setCategoryChosen] = useState<CategoryProps>();
 	const [categories, setCategories] = useState<CategoryProps[]>([]);
 
@@ -86,11 +95,37 @@ const ContactUs: React.FC = () => {
 
 	useEffect(() => {
 		fetchCategories();
+		axios.get(apiUrl + 'user/profile',{
+			withCredentials: true,
+		})
+			.then((response) => {
+				if (response.status === 401 || response.status === 400) {
+					window.location.href = "/login?error=unauthorized";
+					return;
+				}
+				setUserInfo(response.data);
+			})
 	}, []);
 
 	return (
-		<IonPage>
-			<Navbar />
+		<>
+		<Menu/>
+		<IonPage id="main-content">
+			<IonHeader>
+					<IonToolbar>
+						<IonButtons slot='start'>
+							<IonMenuButton></IonMenuButton>
+						</IonButtons>
+						<IonTitle></IonTitle>
+						<div style= {{paddingTop: "25px", fontSize:"20px"}}>Menu</div>
+							{userInfo && (
+								<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px' }}>
+									<IonIcon icon={person} />
+									<IonLabel>Bonjour {userInfo.firstname} {userInfo.lastname}</IonLabel>
+								</div>
+							)}
+					</IonToolbar>
+				</IonHeader>
 			<IonContent class="ion-padding ion-text-center">
 				<form
 					id="form-contact"
@@ -204,6 +239,7 @@ const ContactUs: React.FC = () => {
 				</div>
 			</Popup>
 		</IonPage>
+		</>
 	);
 };
 

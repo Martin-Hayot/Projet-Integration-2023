@@ -18,8 +18,10 @@ import {
     UserTicketsManager,
     Charts,
     Profile,
+    SignUp
 } from "./pages";
-import Signup from "./pages/Signup";
+
+
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
@@ -64,7 +66,7 @@ const App: React.FC = () => {
                         <Login></Login>
                     </Route>
                     <Route path={"/signup"}>
-                        <Signup></Signup>
+                        <SignUp></SignUp>
                     </Route>
                     <Route path={"/about"}>
                         <About></About>

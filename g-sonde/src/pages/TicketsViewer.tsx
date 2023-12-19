@@ -63,7 +63,7 @@ const TicketsViewer: React.FC = () => {
 
 	return (
 		isAdminChecked && (
-			<IonPage>
+			<IonPage id="main-content">
 				<Navbar />
 				<div className="m-0 mx-auto">
 					<IonButton

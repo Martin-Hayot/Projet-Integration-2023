@@ -5,8 +5,8 @@ module.exports = {
 	darkMode: "class",
 	theme: {
 		extend: {},
-		backgroundImage: {
-			'aquarium': "url('aquarium2-compressed-full.jpg')",
+			backgroundImage: {
+			'aquarium': "url('/aquarium2-compressed-full.jpg')",
 		},
 	},
 	variants: {

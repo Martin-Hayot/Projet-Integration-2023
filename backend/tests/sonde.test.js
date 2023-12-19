@@ -233,5 +233,50 @@ describe("Sonde", () => {
                 expect(response.body[0].frequency).toBe(200);
             });
         });
+
+        describe("DELETE /api/aquarium/delete", () => {
+            it("should delete an aquarium when valid userId and aquariumId are provided", async () => {
+                const validData = {
+                    aquariumId: aquariumId,
+                };
+        
+                const response = await supertest(app)
+                    .delete("/api/aquarium/delete")
+                    .set("Cookie", cookies)
+                    .send(validData)
+        
+                expect(response.status).toBe(200);
+                expect(response.body).toEqual({ message: "Aquarium deleted successfully" });
+            });
+        
+            it("should return an error if userId is invalid", async () => {
+                const invalidUserIdData = {
+                    aquariumId: aquariumId,
+                    userId: "",
+                };
+        
+                const response = await supertest(app)
+                    .delete("/api/aquarium/delete")
+                    .set("Cookie", cookies)
+                    .send(invalidUserIdData)
+        
+                expect(response.status).toBe(404);
+                expect(response.body).toEqual({ message: "Aquarium not found" });
+            });
+        
+            it("should return an error if aquariumId is invalid", async () => {
+                const invalidAquariumIdData = {
+                    aquariumId: 'invalidAquariumId',
+                };
+        
+                const response = await supertest(app)
+                    .delete("/api/aquarium/delete")
+                    .set("Cookie", cookies)
+                    .send(invalidAquariumIdData)
+        
+                expect(response.status).toBe(500);
+            });
+        });
+
     });
 });

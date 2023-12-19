@@ -14,11 +14,15 @@ import {
     IonToast,
     IonToolbar,
     useIonViewDidEnter,
+    IonMenuButton,
+    IonIcon
 } from "@ionic/react";
 import { Navbar } from "../../components";
 import axios from "axios";
 import React, { useRef, useEffect } from "react";
 import { any } from "prop-types";
+import Menu from "../../components/Menu";
+import { person } from 'ionicons/icons';
 
 const Profile: React.FC = () => {
     const [toastMessage, setToastMessage] = React.useState("");
@@ -32,6 +36,7 @@ const Profile: React.FC = () => {
     const [lastname, setLastname] = React.useState("");
     const modal = useRef<HTMLIonModalElement>(null);
     const apiUrl = import.meta.env.VITE_URL_API;
+    const [userInfo, setUserInfo] = React.useState<any | null>(null);
 
     const handleModalFormSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -60,6 +65,16 @@ const Profile: React.FC = () => {
     useEffect(() => {
         getProfilePicture();
         getProfileInfo();
+        axios.get(apiUrl + 'user/profile',{
+			withCredentials: true,
+		})
+			.then((response) => {
+				if (response.status === 401 || response.status === 400) {
+					window.location.href = "/login?error=unauthorized";
+					return;
+				}
+				setUserInfo(response.data);
+			})
     }, []);
 
     const getProfileInfo = () => {
@@ -165,8 +180,24 @@ const Profile: React.FC = () => {
     };
 
     return (
-        <IonPage>
-            <Navbar />
+        <>
+        <Menu/>
+        <IonPage id="main-content">
+            <IonHeader>
+					<IonToolbar>
+						<IonButtons slot='start'>
+							<IonMenuButton></IonMenuButton>
+						</IonButtons>
+						<IonTitle></IonTitle>
+						<div style= {{paddingTop: "25px", fontSize:"20px"}}>Menu</div>
+							{userInfo && (
+            					<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px' }}>
+              						<IonIcon icon={person} />
+              						<IonLabel>Bonjour {userInfo.firstname} {userInfo.lastname}</IonLabel>
+            					</div>
+          					)}
+					</IonToolbar>
+				</IonHeader>
             <IonContent className="ion-padding">
                 <div className="md:w-[35em] md:m-auto pt-20">
                     <h1 className="text-4xl text-center mb-6">
@@ -350,6 +381,7 @@ const Profile: React.FC = () => {
                 </div>
             </IonContent>
         </IonPage>
+        </>
     );
 };
 

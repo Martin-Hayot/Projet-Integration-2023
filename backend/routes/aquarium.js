@@ -327,4 +327,85 @@ router.get(
     }
 );
 
+/**
+ * @openapi
+ * /api/aquarium/delete:
+ *   delete:
+ *     tags:
+ *     - aquarium
+ *     summary: Delete an aquarium for the authenticated user
+ *     security:
+ *     - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               aquariumId:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Aquarium deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '400':
+ *         description: No aquarium ID provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '404':
+ *         description: Aquarium not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+router.delete("/delete", requireUser, async (req, res) => {
+    const { userId } = req.user;
+    const { aquariumId } = req.body;
+
+    if (!aquariumId) {
+        return res.status(400).json({ message: "no aquarium" });
+    }
+
+    try {
+        const deletedAquarium = await Aquarium.findOneAndDelete({
+            _id: aquariumId,
+            userId: userId,
+        });
+
+        if (!deletedAquarium) {
+            return res.status(404).json({ message: "Aquarium not found" });
+        }
+
+        res.status(200).json({ message: "Aquarium deleted successfully" });
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ message: error });
+    }
+});
+
 module.exports = router;
