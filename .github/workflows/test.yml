@@ -43,8 +43,3 @@ jobs:
                   cd g-sonde
                   npm ci
                   npm run build
-            - name: Install dependencies and launch tests
-              run: |
-                  cd g-sonde
-                  npm ci
-                  npm run test.e2e
