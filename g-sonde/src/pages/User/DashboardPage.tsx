@@ -4,8 +4,6 @@ import {
 	IonContent,
 	IonFooter,
 	IonHeader,
-	IonMenu,
-	IonMenuButton,
 	IonPage,
 	IonSplitPane,
 	IonTitle,
@@ -17,11 +15,12 @@ import {
 } from '@ionic/react';
 import { Link,useHistory} from 'react-router-dom';
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import { UserContext } from '../../components';
 import requireAuth from "../../utils/requireAuth";
 import { person } from 'ionicons/icons';
 import Navbar from '../../components/Navbar';
+const userId = new URLSearchParams(window.location.search).get("userId");
 
 const DashboardPage: React.FC = () => {
 	const { logout } = React.useContext(UserContext);
@@ -40,8 +39,6 @@ const DashboardPage: React.FC = () => {
 	const [detailedComponent, setDetailedComponent] = useState<string | null>(null);
 	const [selectedAquariumNotifications, setSelectedAquariumNotifications] = useState<any[]>([]);
 	const onLoad = async () => {
-	const userId = new URLSearchParams(window.location.search).get("userId");
-
 	  try {
 		// Information utilisateur
 		const userResponse = await axios.get(`${apiUrl}notification/user/${userId}`);
@@ -76,7 +73,7 @@ const DashboardPage: React.FC = () => {
 
 	const handleAquariumClick = async (aquariumName: string) => {
 		try {
-		  const userId = localStorage.getItem('userId');
+		  //const userId = new URLSearchParams(window.location.search).get("userId");
 		  const notificationResponse = await axios.get(`${apiUrl}notification/notifications/${userId}`);
 		  const notifications = notificationResponse.data.notifications;
 		  

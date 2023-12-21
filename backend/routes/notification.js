@@ -42,29 +42,70 @@ router.get('/aquarium/:userId', (req, res) => {
       res.status(500).json({ error: 'Erreur interne du serveur lors de la récupération des aquariums' });
     });
 });
-  router.get('/user/:userId', (req, res) => {
-    const userId = req.params.userId;
-    User.findOne({ _id: userId }, 'firstname lastname email')
-      .then(userInfo => {
-        if (!userInfo) {
-          res.status(404).json({ message: 'Utilisateur non trouvé' });
-        } else {
+
+router.get('/user/:userId', (req, res) => {
+  const userId = req.params.userId;
+  User.findOne({ _id: userId }, 'firstname lastname email')
+    .then(userInfo => {
+      if (!userInfo) {
+        res.status(404).json({ message: 'Utilisateur non trouvé' });
+      } else {
           res.status(200).json(userInfo);
         }
-      })
-      .catch(error => {
-        console.error(error);
-        res.status(500).json({ error: 'Erreur interne du serveur' });
-      });
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur interne du serveur' });
+    });
   });
+
+  /**
+ * @openapi
+ * /api/notification/notifications/:userId:
+ *   get:
+ *     tags:
+ *     - aquarium
+ *     - user
+ *     - diagnostic
+ *     - report
+ *     - chemicalComponent
+ *     summary: Fetches all data for the reports of an aquarium of an user
+ *     parameters:
+ *     - in: path
+ *       name: userId
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: The ID of the user
+ *     responses:
+ *       '200':
+ *         description: Returns data for the report of a aquarium for a specific user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   userId:
+ *                     type: string
+ *       '400':
+ *         description: Error occurred
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 
   router.get('/notifications/:userId', async (req, res) => {
     //Fonction extraction date et heure
     const extractDateTime = (date) => {
       // Vérifier si date est une chaîne
       if (typeof date === 'string') {
-        console.log('Date avant:', date);
-    
+            
         // Extraire la date et l'heure si la structure attendue est présente
         const dateParts = date.split(": ");
         if (dateParts.length === 2) {
@@ -110,6 +151,7 @@ router.get('/aquarium/:userId', (req, res) => {
       const real = 'Mesure réelle'
       const excpected = 'Mesure attendue'
       const chemicalC = 'Composant'
+
       const processAquariums = async () => {
         for (const aquarium of aquariums) {
           const diagnostics = await Diagnostic.find({ aquariumId: aquarium._id });
