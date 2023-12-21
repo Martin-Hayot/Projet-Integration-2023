@@ -7,7 +7,7 @@
         "dev": "nodemon server.js",
         "start": "node httpsServer.js",
         "test": "jest --detectOpenHandles --forceExit",
-        "docs": "nodemon swagger.js"
+        "docs": "node swagger.js"
     },
     "keywords": [],
     "author": "",
