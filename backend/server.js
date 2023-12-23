@@ -1,11 +1,5 @@
-const { json } = require("express");
-express = require("express");
+const app = require("./app");
 
-const port = process.env.PORT || 8080;
-const app = express();
-
-app.use(json());
-
-app.listen(port, () => {
-	console.log(`Server running on port ${port}`);
+app.listen(3001, () => {
+	console.log("listening on port 3001");
 });
